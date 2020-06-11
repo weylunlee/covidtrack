@@ -36,8 +36,8 @@ function csvToSeries(text) {
 
 	return [
 		{type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-		{type: 'line spline', line_width: 5, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
-		{type: 'line spline', line_width: 5, color: '#995261', name: '14-Day MA', points: movingAvg2}
+		{type: 'line spline', line_width: 4, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
+		{type: 'line spline', line_width: 4, color: '#995261', name: '14-Day MA', points: movingAvg2}
 		];
 }
 
