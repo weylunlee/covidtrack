@@ -24,6 +24,7 @@ function csvToSeries(text) {
     let minDate = new Date('2020-03-15');
 
     let count = [];
+    let i=0;
     dataAsJson.forEach(function (row) {
         if (row.county === 'Los Angeles') {
             if (minDate.getTime() < stringToDate(row.date).getTime()) {
@@ -37,10 +38,11 @@ function csvToSeries(text) {
     let expMovingAvg1 = calcExpMovingAverage(count, 7);
     let expMovingAvg2 = calcExpMovingAverage(count, 14);
 
-    return [[
-        {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-        {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
-        {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
+    return [
+        [
+            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
+            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
+            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
         ],
         [
             {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
@@ -52,11 +54,25 @@ function csvToSeries(text) {
 
 // Calculates moving average for specified number of days
 function calcMovingAverage(count, days) {
+    
+    // Check if ascending or descending order!
+    // Assumes dates are not ordered randomly, and no missing dates!
+    let ascending = true;
+    if (count.length > 1 && count[0].x > count[1].x) {
+        ascending = false;
+    }
+    
     let movingAvg = [];
     for (var i=0; i<count.length; i++) {
         var avg = 0;
         for (var offset=0; offset<days; offset++) {
-            avg += i-offset < 0 ? 0 : count[i-offset].y;
+          
+            if (ascending) {
+                avg += i-offset < 0 ? 0 : count[i-offset].y;
+            }
+            else {
+                avg += i+offset >= count.length ? 0 : count[i+offset].y;
+            }
         }
         avg /= days;
         movingAvg.push({x: count[i].x, y: Math.round(avg)});
@@ -67,15 +83,33 @@ function calcMovingAverage(count, days) {
 
 // Calculates exponential moving average for specified number of days
 function calcExpMovingAverage(count, days) {
+    
+    // Check if ascending or descending order!
+    // Assumes dates are not ordered randomly, and no missing dates!
+    let ascending = true;
+    if (count.length > 1 && count[0].x > count[1].x) {
+        ascending = false;
+    }
+    
     let movingAvg = [];
+
+    // Save prev EMA to keep precision for subsequent calcs
     let prevEma = 0;
-    for (var i=0; i<count.length; i++) {
-// let prevEma = i==0 ? 0 : movingAvg[i-1].y;
-        let mult = 2/(days+1);
-        let ema = ((count[i].y - prevEma) * mult) + prevEma;
-        movingAvg.push({x: count[i].x, y: Math.round(ema)});
-        
-        prevEma = ema;
+    let mult = 2/(days+1);
+    
+    if (ascending) {
+        for (var i=0; i<count.length; i++) {        
+            let ema = ((count[i].y - prevEma) * mult) + prevEma;
+            movingAvg.push({x: count[i].x, y: Math.round(ema)});
+            prevEma = ema;
+        }
+    }
+    else {
+        for (var i=count.length-1; i>=0; i--) {
+            let ema = ((count[i].y - prevEma) * mult) + prevEma;
+            movingAvg.push({x: count[i].x, y: Math.round(ema)});
+            prevEma = ema;
+        }
     }
 
     return movingAvg;
