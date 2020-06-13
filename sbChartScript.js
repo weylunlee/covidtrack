@@ -21,12 +21,14 @@ function stringToDate(millis) {
 // Create the series
 function csvToSeries(text) {
     let dataAsJson = JSC.csv2Json(text);
-    let minDate = new Date('2020-03-15');
+    let minDate = new Date('2020-03-16');
 
     let count = [];
     dataAsJson.forEach(function (row) {
         if (row.county === 'San Bernardino') {
             if (minDate.getTime() < stringToDate(row.date).getTime()) {
+//                console.log(row.new_confirmed_cases);
+                
                 count.push({x: stringToDate(row.date), y: row.new_confirmed_cases === '' ? 0 : parseInt(row.new_confirmed_cases, 10)});
             }
         }
@@ -50,34 +52,71 @@ function csvToSeries(text) {
         ]];
 }
 
-// Calculates moving average for specified number of days
+//Calculates moving average for specified number of days
 function calcMovingAverage(count, days) {
+    
+    // Check if ascending or descending order!
+    // Assumes dates are not ordered randomly, and no missing dates!
+    let ascending = true;
+    if (count.length > 1 && count[0].x > count[1].x) {
+        ascending = false;
+    }
+    
     let movingAvg = [];
     for (var i=0; i<count.length; i++) {
         var avg = 0;
         for (var offset=0; offset<days; offset++) {
-            avg += i-offset < 0 ? 0 : count[i-offset].y;
+          
+            if (ascending) {
+                avg += i-offset < 0 ? 0 : count[i-offset].y;
+            }
+            else {
+                avg += i+offset >= count.length ? 0 : count[i+offset].y;
+            }
         }
         avg /= days;
         movingAvg.push({x: count[i].x, y: Math.round(avg)});
     }
 
+//    console.log(count);
+//    console.log(movingAvg);
+    
     return movingAvg;
 }
 
 // Calculates exponential moving average for specified number of days
 function calcExpMovingAverage(count, days) {
+    
+    // Check if ascending or descending order!
+    // Assumes dates are not ordered randomly, and no missing dates!
+    let ascending = true;
+    if (count.length > 1 && count[0].x > count[1].x) {
+        ascending = false;
+    }
+    
     let movingAvg = [];
+
+    // Save prev EMA to keep precision for subsequent calcs
     let prevEma = 0;
-    for (var i=0; i<count.length; i++) {
-// let prevEma = i==0 ? 0 : movingAvg[i-1].y;
-        let mult = 2/(days+1);
-        let ema = ((count[i].y - prevEma) * mult) + prevEma;
-        movingAvg.push({x: count[i].x, y: Math.round(ema)});
-        
-        prevEma = ema;
+    let mult = 2/(days+1);
+    
+    if (ascending) {
+        for (var i=0; i<count.length; i++) {        
+            let ema = ((count[i].y - prevEma) * mult) + prevEma;
+            movingAvg.push({x: count[i].x, y: Math.round(ema)});
+            prevEma = ema;
+        }
+    }
+    else {
+        for (var i=count.length-1; i>=0; i--) {
+            let ema = ((count[i].y - prevEma) * mult) + prevEma;
+            movingAvg.push({x: count[i].x, y: Math.round(ema)});
+            prevEma = ema;
+        }
     }
 
+//    console.log(movingAvg);
+    
     return movingAvg;
 }
 
