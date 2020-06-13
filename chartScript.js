@@ -24,11 +24,12 @@ function csvToSeries(text) {
     let minDate = new Date('2020-03-15');
 
     let count = [];
-    let i=0;
     dataAsJson.forEach(function (row) {
-        if (row.county === 'Los Angeles') {
+        if (row.county == 'Los Angeles') {
             if (minDate.getTime() < stringToDate(row.date).getTime()) {
-                count.push({x: stringToDate(row.date), y: row.new_confirmed_cases === '' ? 0 : parseInt(row.new_confirmed_cases, 10)});
+
+                let newCases = row.new_confirmed_cases;
+                count.push({x: stringToDate(row.date), y: newCases == null || newCases == undefined ? 0 : parseInt(newCases, 10)});
             }
         }
     });
@@ -38,18 +39,16 @@ function csvToSeries(text) {
     let expMovingAvg1 = calcExpMovingAverage(count, 7);
     let expMovingAvg2 = calcExpMovingAverage(count, 14);
 
-    return [
-        [
-            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
-            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
-        ],
-        [
-            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day EMA', points: expMovingAvg1},
-            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day EMA', points: expMovingAvg2}
-   
-        ]];
+    return [[
+        {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
+        {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
+        {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
+    ],
+    [
+        {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
+        {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day EMA', points: expMovingAvg1},
+        {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day EMA', points: expMovingAvg2}
+    ]];
 }
 
 // Calculates moving average for specified number of days
