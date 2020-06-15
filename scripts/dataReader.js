@@ -44,6 +44,13 @@ function createChartFromPageSource(chartName) {
                     let json = $.parseJSON(this.innerHTML)
                     for (let i=0; i<json.length; i++) {
                         if (minDate.getTime() < stringToDate(json[i].date).getTime()) {
+//                            if (json[i].agencies_count != json[i].agencies_updated && json[i].in_progress == true) {
+//                                continue;
+//                            }
+                            if (json[i].updated == false) {
+                                continue;
+                            }
+                            
                             count.push({x: stringToDate(json[i].date), y: json[i].new_confirmed_cases});
                         }
                     }
