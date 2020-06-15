@@ -47,8 +47,9 @@ function createChartFromPageSource(chartName) {
 //                            if (json[i].agencies_count != json[i].agencies_updated && json[i].in_progress == true) {
 //                                continue;
 //                            }
-                            if (json[i].updated == false) {
+                            if (json[i].in_progress == true) {
                                 continue;
+                                
                             }
                             
                             count.push({x: stringToDate(json[i].date), y: json[i].new_confirmed_cases});
