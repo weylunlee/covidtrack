@@ -4,11 +4,19 @@
 <meta charset="UTF-8">
 <title>San Bernardino County New Cases by Day</title>
 
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="stylesheet" href="indexStyle.css?v=200612">
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
+<link rel="stylesheet" href="styles/indexStyle.css?v=200611">
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
-<script src="sbChartScript.js?v=2006122"></script>
+
+<script src="scripts/chartScript.js?v=200614"></script>
+<script src="scripts/dataReader.js?200614"></script>
+<script>
+    createChartFromGit("San Bernardino", "San Bernardino County New Cases by Day");
+</script>
+
 </head>
 <body>
     <div id="smaChartDiv" class="chartContent"></div>

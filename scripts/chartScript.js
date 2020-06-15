@@ -1,54 +1,23 @@
-//Fetch csv from url, then convert cvs to series, then create chart
-JSC.fetch('https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-county-totals.csv')
-.then(function (response) {
-    return response.text();
-})
-.then(function (text) {
-    let series = csvToSeries(text);
-    createChart(series[0], "smaChartDiv");
-    createChart(series[1], "emaChartDiv");
-})
-.catch(function (error) {
-    console.log(error);
-});
-
-// Convert string to date, taking into account time zone diff
-function stringToDate(millis) {
-    let date = new Date(millis);
-    return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-}
-
-// Create the series
-function csvToSeries(text) {
-    let dataAsJson = JSC.csv2Json(text);
-    let minDate = new Date('2020-03-15');
-
-    let count = [];
-    dataAsJson.forEach(function (row) {
-        if (row.county == 'San Bernardino') {
-            if (minDate.getTime() < stringToDate(row.date).getTime()) {
-
-                let newCases = row.new_confirmed_cases;
-                count.push({x: stringToDate(row.date), y: newCases == null || newCases == undefined ? 0 : parseInt(newCases, 10)});
-            }
-        }
-    });
-
+// Creates series and chart given array of array[date][new_confirmed_cases]
+function calcAveragesAndChart(count, chartName) {
     let movingAvg1 = calcMovingAverage(count, 7);
     let movingAvg2 = calcMovingAverage(count, 14);
     let expMovingAvg1 = calcExpMovingAverage(count, 7);
     let expMovingAvg2 = calcExpMovingAverage(count, 14);
 
-    return [[
+    createChart(
+    [
         {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
         {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
         {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
-    ],
+    ], "smaChartDiv", chartName);
+    
+    createChart(
     [
         {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
         {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day EMA', points: expMovingAvg1},
         {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day EMA', points: expMovingAvg2}
-    ]];
+    ], "emaChartDiv", chartName);
 }
 
 // Calculates moving average for specified number of days
@@ -115,12 +84,12 @@ function calcExpMovingAverage(count, days) {
 }
 
 // Create the chart
-function createChart(series, divName) {
+function createChart(series, divName, chartName) {
     JSC.Chart(divName, {
         title: { 
             position: 'center', 
             label: { 
-                text: 'San Bernardino County New Cases by Day', 
+                text: chartName, 
                 style_fontSize: 25 
             } 
         }, 
