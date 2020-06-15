@@ -43,7 +43,7 @@ function createChartFromPageSource(chartName) {
                 if (this.id == 'timeseries') {
                     let json = $.parseJSON(this.innerHTML)
                     for (let i=0; i<json.length; i++) {
-                        if (minDate.getTime() < stringToDate(json[i].date).getTime() && json[i].in_progress == false) {
+                        if (minDate.getTime() < stringToDate(json[i].date).getTime()) {
                             count.push({x: stringToDate(json[i].date), y: json[i].new_confirmed_cases});
                         }
                     }
