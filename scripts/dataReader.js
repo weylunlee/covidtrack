@@ -31,9 +31,9 @@ function createChartFromGit(countyName, chartName) {
 
 // Read page source, convert to json, create chart
 // Data only available for Los Angeles County
-function createChartFromPageSource(chartName) {
+function createChartFromPageSource(chartName, url) {
     $.ajax({
-        url: 'https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html',
+        url: url,
         type: 'GET',
         success: function(data) {
             var dom = $(data); 
