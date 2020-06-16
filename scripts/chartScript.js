@@ -1,23 +1,26 @@
 // Creates series and chart given array of array[date][new_confirmed_cases]
-function calcAveragesAndChart(count, chartName) {
+function calcAveragesAndChart(count, chartName, avgType) {
     let movingAvg1 = calcMovingAverage(count, 7);
     let movingAvg2 = calcMovingAverage(count, 14);
     let expMovingAvg1 = calcExpMovingAverage(count, 7);
     let expMovingAvg2 = calcExpMovingAverage(count, 14);
 
+    if(avgType == 'SMA') {
     createChart(
-    [
-        {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-        {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
-        {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
-    ], "smaChartDiv", chartName);
-    
+        [
+            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
+            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
+            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
+        ], "chartDiv", chartName);
+    }
+    else {
     createChart(
-    [
-        {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-        {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day EMA', points: expMovingAvg1},
-        {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day EMA', points: expMovingAvg2}
-    ], "emaChartDiv", chartName);
+        [
+            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
+            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day EMA', points: expMovingAvg1},
+            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day EMA', points: expMovingAvg2}
+        ], "chartDiv", chartName);
+    }
 }
 
 // Calculates moving average for specified number of days

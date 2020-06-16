@@ -2,7 +2,7 @@
 const minDate = new Date('2020-03-15');
 
 // Fetch csv from url, then convert cvs to series, then create chart
-function createChartFromGit(countyName, chartName) {
+function createChartFromGit(countyName, chartName, avgType) {
     JSC.fetch('https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-county-totals.csv')
     .then(function (response) {
         return response.text();
@@ -22,7 +22,7 @@ function createChartFromGit(countyName, chartName) {
                 }
             }
         });
-        calcAveragesAndChart(count, chartName);
+        calcAveragesAndChart(count, chartName, avgType);
     })
     .catch(function (error) {
         console.log(error);
@@ -31,7 +31,7 @@ function createChartFromGit(countyName, chartName) {
 
 // Read page source, convert to json, create chart
 // Data only available for Los Angeles County
-function createChartFromPageSource(chartName, url) {
+function createChartFromPageSource(chartName, url, avgType) {
     $.ajax({
         url: url,
         type: 'GET',
@@ -51,7 +51,7 @@ function createChartFromPageSource(chartName, url) {
                     }
                 }
             });
-            calcAveragesAndChart(count, chartName);
+            calcAveragesAndChart(count, chartName, avgType);
         }
     });
 }

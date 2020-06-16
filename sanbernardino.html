@@ -6,22 +6,33 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=200611">
+<link rel="stylesheet" href="styles/indexStyle.css?v=2006152307">
 
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/chartScript.js?v=200615"></script>
-<script src="scripts/dataReader.js?2006154"></script>
+<script src="scripts/chartScript.js?v=2006152307"></script>
+<script src="scripts/dataReader.js?2006152307"></script>
 <script>
-    //createChartFromGit("San Bernardino", "San Bernardino County New Cases by Day");
-    createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html");
+    createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "SMA");
 </script>
 
 </head>
 <body>
-    <div id="smaChartDiv" class="chartContent"></div>
-    <hr>
-    <div id="emaChartDiv" class="chartContent"></div>
+    <div class="center">
+        <div class="radio-toolbar">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" id="radioMa" name="avgType"
+                value="MA" checked
+                onclick='createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "SMA")'>
+            <label for="radioMa">MA</label> 
+            <input type="radio"
+                id="radioEma" name="avgType" value="EMA"
+                onclick='createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "EMA")'>
+            <label for="radioEma">EMA</label>
+        </div>
+        <br>
+    </div>
+    <div id="chartDiv" class="chartContent"></div>
 </body>
 </html>
