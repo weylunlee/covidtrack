@@ -14,21 +14,19 @@
 <script src="scripts/chartScript.js?v=2006152307"></script>
 <script src="scripts/dataReader.js?2006152307"></script>
 <script>
-    createChartFromPageSource("LA County New Cases by Day","https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html","SMA");
+    createChartFromGit("Los Angeles", "LA County New Cases by Day", "SMA");
 </script>
 
 </head>
 <body>
     <div class="center">
         <div class="radio-toolbar">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="radioMa" name="avgType"
-                value="MA" checked
-                onclick='createChartFromPageSource("LA County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", "SMA");'>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            <input type="radio" id="radioMa" name="avgType" value="MA" checked
+                onclick='createChartFromGit("Los Angeles", "LA County New Cases by Day", "SMA");'>
             <label for="radioMa">MA</label> 
-            <input type="radio"
-                id="radioEma" name="avgType" value="EMA"
-                onclick='createChartFromPageSource("LA County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", "EMA");'>
+            <input type="radio" id="radioEma" name="avgType" value="EMA"
+                onclick='createChartFromGit("Los Angeles", "LA County New Cases by Day", "EMA");'>
             <label for="radioEma">EMA</label>
         </div>
         <br>
