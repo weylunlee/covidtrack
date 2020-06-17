@@ -48,7 +48,6 @@
 @media only screen and (min-width: 1080px) {
     .radio-toolbar label {
         width: auto;
-        border-radius: 50px;
         padding: 3px 20px;
         font-size: 1em;
         margin: 0px;
