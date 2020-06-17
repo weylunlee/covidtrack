@@ -45,7 +45,7 @@
     border: 2px solid #ffd480;
 }
 
-@media only screen and (min-width: 1080px) {
+@media only screen and (min-width: 1440px) {
    .chartContent {
         width: 70vw;
         height: 48vw;
@@ -53,7 +53,7 @@
     }
 }
 
-@media only screen and (min-width: 850px) {
+@media only screen and (min-width: 1080px) {
     .radio-toolbar {
         margin: 0px;
     }
