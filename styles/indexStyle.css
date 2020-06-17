@@ -1,6 +1,6 @@
 .chartContent {
-    width: 70vw;
-    height: 45vw;
+    width: 100%;
+    height: 70vw;
     margin: 0 auto;
 }
 
@@ -20,14 +20,16 @@
 }
 
 .radio-toolbar label {
+    text-align: center;
     display: inline-block;
     background-color: #f2f2f2;
-    padding: 5px 20px;
+    //padding: 3px 0px;
     font-family: sans-serif, Arial;
-    font-size: 16px;
-    border: 2px solid #d9d9d9;
-    border-radius: 50px;
+    font-size: 1em;
+    border: 2px solid #f2f2f2;
+    border-radius: 0px;
     transition: all 0.3s ease-in;
+    width: 100%;
 }
 
 .radio-toolbar label:hover {
@@ -40,5 +42,26 @@
 
 .radio-toolbar input[type="radio"]:checked+label {
     background-color: #ffd480;
-    border-color: #808080;
+    border: 2px solid #ffd480;
+}
+
+@media only screen and (min-width: 1080px) {
+   .chartContent {
+        width: 70vw;
+        height: 48vw;
+        margin: 0 auto;
+    }
+}
+
+@media only screen and (min-width: 850px) {
+    .radio-toolbar {
+        margin: 0px;
+    }
+    
+    .radio-toolbar label {
+        width: auto;
+        border-radius: 50px;
+        padding: 3px 20px;
+        border-radius: 50px;
+    }
 }
