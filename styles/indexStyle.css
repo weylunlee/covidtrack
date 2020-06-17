@@ -23,11 +23,11 @@
     text-align: center;
     display: inline-block;
     background-color: #f2f2f2;
-    //padding: 3px 0px;
+    margin: 5px;
     font-family: sans-serif, Arial;
     font-size: 3em;
     border: 3px solid #f2f2f2;
-    border-radius: 0px;
+    border-radius: 50px;
     transition: all 0.3s ease-in;
     width: 100%;
 }
@@ -45,24 +45,24 @@
     border: 3px solid #ffd480;
 }
 
+@media only screen and (min-width: 1080px) {
+    .radio-toolbar label {
+        width: auto;
+        border-radius: 50px;
+        padding: 3px 20px;
+        font-size: 1em;
+        margin: 0px;
+    }
+
+    .radio-toolbar {
+        margin: 0px;
+    }
+}
+
 @media only screen and (min-width: 1440px) {
    .chartContent {
         width: 70vw;
         height: 48vw;
         margin: 0 auto;
-    }
-}
-
-@media only screen and (min-width: 1080px) {
-    .radio-toolbar {
-        margin: 0px;
-    }
-    
-    .radio-toolbar label {
-        width: auto;
-        border-radius: 50px;
-        padding: 3px 20px;
-        border-radius: 50px;
-        font-size: 1em;
     }
 }
