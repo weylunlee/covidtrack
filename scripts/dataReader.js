@@ -22,11 +22,48 @@ function createChartFromGit(countyName, chartName, avgType) {
                 }
             }
         });
-        calcAveragesAndChart(count, chartName, avgType);
+        calcAveragesAndChart(count, "chartDiv", chartName, avgType);
     })
     .catch(function (error) {
         console.log(error);
     });    
+}
+
+// Fetch csv from url, then convert csv to series, then create chart, given list of cities
+function createChartForCities(cities, chartDiv, avgType) {
+    JSC.fetch('https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-place-totals.csv')
+    .then(function (response) {
+        return response.text();    
+    })
+    .then(function (text) {
+        let dataAsJson = JSC.csv2Json(text);
+        for (let i=0; i<cities.length; i++) {
+            createChartForCity(dataAsJson, cities[i], chartDiv+cities[i], avgType);
+        }
+    })
+    .catch(function (error) {
+    	console.log(error);
+	});    
+}
+
+// Given json data, create series for each city, create chart
+function createChartForCity(dataAsJson, cityName, chartDiv, avgType) {
+     let count = [];
+     dataAsJson.forEach(function (row) {
+         
+         // Filter only for specified county name
+         if (row.place == cityName) {
+             if (minDate.getTime() < stringToDate(row.date).getTime()) {
+
+                 let cases = row.confirmed_cases;
+                 count.push({x: stringToDate(row.date), y: cases == null || cases == undefined ? 0 : parseInt(cases, 10)});
+             }
+         }
+     });
+     
+     let newCount = calcNewConfirmed(count);
+     
+     calcAveragesAndChart(newCount, chartDiv, cityName + " New Cases by Day", avgType);
 }
 
 // Read page source, convert to json, create chart
@@ -51,7 +88,7 @@ function createChartFromPageSource(chartName, url, avgType) {
                     }
                 }
             });
-            calcAveragesAndChart(count, chartName, avgType);
+            calcAveragesAndChart(count, "chartDiv", chartName, avgType);
         }
     });
 }
