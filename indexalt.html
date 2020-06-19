@@ -11,10 +11,10 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/chartScript.js?v=2006191423"></script>
+<script src="scripts/chartScript.js?v=2006191501"></script>
 <script src="scripts/dataReader.js?2006182258"></script>
 <script>
-    createChartFromGit("Los Angeles", "LA County New Cases by Day", "SMA");
+    createChartFromGit("Los Angeles", "LA County New Cases by Day", "MA");
 </script>
 
 </head>
@@ -24,7 +24,7 @@
     <div class="center">
         <div class="radio-toolbar">
             <input type="radio" id="radioMa" name="avgType" value="MA" checked
-                onclick='createChartFromGit("Los Angeles", "LA County New Cases by Day", "SMA");'>
+                onclick='createChartFromGit("Los Angeles", "LA County New Cases by Day", "MA");'>
             <label for="radioMa">MA</label> 
             <input type="radio" id="radioEma" name="avgType" value="EMA"
                 onclick='createChartFromGit("Los Angeles", "LA County New Cases by Day", "EMA");'>

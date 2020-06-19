@@ -2,7 +2,7 @@
 function calcAveragesAndChart(count, chartDiv, chartName, avgType) {
     var movingAvg1, movingAvg2;
     
-    if(avgType == 'SMA') {
+    if(avgType == 'MA') {
         movingAvg1 = calcMovingAverage(count, 7);
         movingAvg2 = calcMovingAverage(count, 14);
     }

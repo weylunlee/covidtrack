@@ -11,12 +11,12 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/chartScript.js?v=2006191423"></script>
+<script src="scripts/chartScript.js?v=2006191501"></script>
 <script src="scripts/dataReader.js?2006182258"></script>
 <script>
     let cities = ["Alhambra", "Arcadia", "Azusa", "Duarte", "El Monte", "Glendora", "Monrovia", "Montebello", "Monterey Park", 
         "Rosemead", "San Dimas", "San Gabriel", "San Marino", "Santa Monica", "Temple City", "Upland"];
-    createChartForCities(cities, "chartDiv", "SMA");
+    createChartForCities(cities, "chartDiv", "MA");
 </script>
 </head>
 <body>
@@ -40,7 +40,7 @@
     <div class="center">
         <div class="radio-toolbar">
             <input type="radio" id="radioMa" name="avgType" value="MA" checked
-                onclick='createChartForCities(cities, "chartDiv", "SMA");'>
+                onclick='createChartForCities(cities, "chartDiv", "MA");'>
             <label for="radioMa">MA</label> 
             <input type="radio" id="radioEma" name="avgType" value="EMA"
                 onclick='createChartForCities(cities, "chartDiv", "EMA");'>
