@@ -1,26 +1,22 @@
 // Creates series and chart given array of array[date][new_confirmed_cases]
 function calcAveragesAndChart(count, chartDiv, chartName, avgType) {
-    let movingAvg1 = calcMovingAverage(count, 7);
-    let movingAvg2 = calcMovingAverage(count, 14);
-    let expMovingAvg1 = calcExpMovingAverage(count, 7);
-    let expMovingAvg2 = calcExpMovingAverage(count, 14);
-
+    var movingAvg1, movingAvg2;
+    
     if(avgType == 'SMA') {
-    createChart(
-        [
-            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day MA', points: movingAvg1},
-            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day MA', points: movingAvg2}
-        ], chartDiv, chartName);
+        movingAvg1 = calcMovingAverage(count, 7);
+        movingAvg2 = calcMovingAverage(count, 14);
     }
     else {
-    createChart(
-        [
-            {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
-            {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day EMA', points: expMovingAvg1},
-            {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day EMA', points: expMovingAvg2}
-        ], chartDiv, chartName);
+        movingAvg1 = calcExpMovingAverage(count, 7);
+        movingAvg2 = calcExpMovingAverage(count, 14);
     }
+
+    createChart(
+    [
+        {type: 'column', bar_width: 1, color: '#7ecef9', name: 'New Cases', points: count},
+        {type: 'line spline', line_width: 3, color: '#3b577f', name: '7-Day ' + avgType, points: movingAvg1},
+        {type: 'line spline', line_width: 3, color: '#CF5864', name: '14-Day ' + avgType, points: movingAvg2}
+    ], chartDiv, chartName);
 }
 
 // Calculates new confirmed based on daily cumulative confirmed
@@ -131,46 +127,39 @@ function createChart(series, divName, chartName) {
                 style_fontSize: 25 
             } 
         }, 
-        annotations: [ 
-            { 
-                label_text: 
-                    'Raw data from LA Times', 
-                    position: 'bottom left'
-            } 
-            ], 
-            defaultPoint: { 
-                marker_visible: false,
-                tooltip: '<span style="width:75px">%seriesName</span> %icon {%yvalue:n0}'
-            },
-            yAxis: [ 
-                    { id: 'mainY', formatString: 'n0' }, 
-                    { 
-                      id: 'secondY', 
-                      scale_syncWith: 'mainY', 
-                      orientation: 'opposite', 
-                      line_color: '#e2e2e2', 
-                      defaultTick: { 
-                        enabled: false, 
-                        gridLine_visible: false
-                      } 
-                    } 
-                  ], 
-            xAxis: {
-                scale_type: "time",
-                defaultTick_enabled: true,
-                crosshair_enabled: true, 
-                formatString: 'MMM d',
-                scale: {
-                  interval: {
-                    unit: "day",
-                    multiplier: 7
-                  },
-                }
-            },
-            legend: { 
-                position: 'inside top', 
-                template: '%icon %name'
-            },
-            series: series
+        defaultPoint: { 
+            marker_visible: false,
+            tooltip: '<span style="width:75px">%seriesName</span> %icon {%yvalue:n0}'
+        },
+        yAxis: [ 
+                { id: 'mainY', formatString: 'n0' }, 
+                { 
+                  id: 'secondY', 
+                  scale_syncWith: 'mainY', 
+                  orientation: 'opposite', 
+                  line_color: '#e2e2e2', 
+                  defaultTick: { 
+                    enabled: false, 
+                    gridLine_visible: false
+                  } 
+                } 
+              ], 
+        xAxis: {
+            scale_type: "time",
+            defaultTick_enabled: true,
+            crosshair_enabled: true, 
+            formatString: 'MMM d',
+            scale: {
+              interval: {
+                unit: "day",
+                multiplier: 7
+              },
+            }
+        },
+        legend: { 
+            position: 'inside top', 
+            template: '%icon %name'
+        },
+        series: series
     });
 }
