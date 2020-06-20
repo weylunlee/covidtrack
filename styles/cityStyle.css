@@ -5,7 +5,6 @@
         width: 50%; 
         float: left;
         height: calc(70vw/2);
-        display: inline-block;
     }
 }
 
@@ -14,6 +13,5 @@
         width: 25%; 
         float: left;
         height: calc(70vw/4);
-        display: inline-block;
     }
 }
