@@ -11,25 +11,28 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/chartScript.js?v=202006201214"></script>
-<script src="scripts/dataReader.js?202006201214"></script>
+<script src="scripts/dataReader.js?202006261629"></script>
+<script src="scripts/calcScript.js?202006261629"></script>
+<script src="scripts/chartScript.js?v=202006261629"></script>
 <script>
-    createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA");
+    chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA");
 </script>
 
 </head>
 <body>
     <div id="chartDiv" class="chartContent"></div>
+    <div id="hospitalizationChartDiv" class="chartContent"></div>
+    <div id="deathsChartDiv" class="chartContent"></div>
 
     <div class="center">
         <div class="radio-toolbar">
             <input type="radio" id="radioMa" name="avgType"
                 value="MA" checked
-                onclick='createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA")'>
+                onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA")'>
             <label for="radioMa">MA</label> 
             <input type="radio"
                 id="radioEma" name="avgType" value="EMA"
-                onclick='createChartFromPageSource("San Bernardino County New Cases by Day", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "EMA")'>
+                onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "EMA")'>
             <label for="radioEma">EMA</label>
         </div>
     </div>
