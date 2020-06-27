@@ -6,25 +6,28 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=202006201214">
+<link rel="stylesheet" href="styles/indexStyle.css?v=202006262230">
 
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/dataReader.js?202006261629"></script>
-<script src="scripts/calcScript.js?202006261629"></script>
-<script src="scripts/chartScript.js?v=202006261629"></script>
+<script src="scripts/dataReader.js?202006262230"></script>
+<script src="scripts/calcScript.js?202006262230"></script>
+<script src="scripts/chartScript.js?v=202006262230"></script>
 <script>
     chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA");
 </script>
-
 </head>
-<body>
-    <div id="chartDiv" class="chartContent"></div>
-    <div id="hospitalizationChartDiv" class="chartContent"></div>
-    <div id="deathsChartDiv" class="chartContent"></div>
+<body class="page-container">
+    <div>
+        <div id="chartDiv" class="chartContent"></div>
+        <div id="hospitalizationChartDiv" class="chartContent"></div>
+        <div id="deathsChartDiv" class="chartContent"></div>
 
-    <div class="center">
+        Raw data from <a href="https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-county-totals.csv">LA Times</a>
+    </div>
+
+    <div class="footer">
         <div class="radio-toolbar">
             <input type="radio" id="radioMa" name="avgType"
                 value="MA" checked
@@ -37,6 +40,5 @@
         </div>
     </div>
     
-    Raw data from <a href="https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-county-totals.csv">LA Times</a>
 </body>
 </html>

@@ -2,11 +2,22 @@
     width: 100%;
     height: 70vw;
     margin: 0 auto;
+    flex-direction: row;
 }
 
-.center {
+.page-container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.footer {
     text-align: center;
     width: 100%;
+    bottom: 0;
+    position: sticky;
+    background-color: rgba(255,255,255,0.85);
 }
 
 .radio-toolbar {
@@ -34,10 +45,6 @@
 
 .radio-toolbar label:hover {
     background-color: #ffffff;
-}
-
-.radio-toolbar input[type="radio"]:focus+label {
-    
 }
 
 .radio-toolbar input[type="radio"]:checked+label {

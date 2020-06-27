@@ -6,39 +6,43 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/cityStyle.css?v=202006201214">
+<link rel="stylesheet" href="styles/cityStyle.css?v=202006262230">
 
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/dataReader.js?202006261629"></script>
-<script src="scripts/calcScript.js?202006261629"></script>
-<script src="scripts/chartScript.js?v=202006261629"></script>
+<script src="scripts/dataReader.js?202006262230"></script>
+<script src="scripts/calcScript.js?202006262230"></script>
+<script src="scripts/chartScript.js?v=202006262230"></script>
 <script>
     let cities = ["Alhambra", "Arcadia", "Azusa", "Duarte", "El Monte", "Glendora", "Monrovia", "Montebello", "Monterey Park", 
         "Rosemead", "San Dimas", "San Gabriel", "San Marino", "Santa Monica", "Temple City", "Upland"];
     chartForCities(cities, "chartDiv", "MA");
 </script>
 </head>
-<body>
-    <div id="chartDivAlhambra" class="chartContent"></div>
-    <div id="chartDivArcadia" class="chartContent"></div>
-    <div id="chartDivAzusa" class="chartContent"></div>
-    <div id="chartDivDuarte" class="chartContent"></div>
-    <div id="chartDivEl Monte" class="chartContent"></div>
-    <div id="chartDivGlendora" class="chartContent"></div>
-    <div id="chartDivMonrovia" class="chartContent"></div>
-    <div id="chartDivMontebello" class="chartContent"></div>
-    <div id="chartDivMonterey Park" class="chartContent"></div>
-    <div id="chartDivRosemead" class="chartContent"></div>
-    <div id="chartDivSan Dimas" class="chartContent"></div>
-    <div id="chartDivSan Gabriel" class="chartContent"></div>
-    <div id="chartDivSan Marino" class="chartContent"></div>
-    <div id="chartDivSanta Monica" class="chartContent"></div>
-    <div id="chartDivTemple City" class="chartContent"></div>
-    <div id="chartDivUpland" class="chartContent"></div>
+<body class="page-container">
+    <div>
+        <div id="chartDivAlhambra" class="chartContent"></div>
+        <div id="chartDivArcadia" class="chartContent"></div>
+        <div id="chartDivAzusa" class="chartContent"></div>
+        <div id="chartDivDuarte" class="chartContent"></div>
+        <div id="chartDivEl Monte" class="chartContent"></div>
+        <div id="chartDivGlendora" class="chartContent"></div>
+        <div id="chartDivMonrovia" class="chartContent"></div>
+        <div id="chartDivMontebello" class="chartContent"></div>
+        <div id="chartDivMonterey Park" class="chartContent"></div>
+        <div id="chartDivRosemead" class="chartContent"></div>
+        <div id="chartDivSan Dimas" class="chartContent"></div>
+        <div id="chartDivSan Gabriel" class="chartContent"></div>
+        <div id="chartDivSan Marino" class="chartContent"></div>
+        <div id="chartDivSanta Monica" class="chartContent"></div>
+        <div id="chartDivTemple City" class="chartContent"></div>
+        <div id="chartDivUpland" class="chartContent"></div>
 
-    <div class="center">
+        Raw data from <a href="https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-place-totals.csv">LA Times</a>
+    </div>
+
+    <div class="footer">
         <div class="radio-toolbar">
             <input type="radio" id="radioMa" name="avgType" value="MA" checked
                 onclick='chartForCities(cities, "chartDiv", "MA");'>
@@ -49,6 +53,5 @@
         </div>
     </div>
     
-    Raw data from <a href="https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-place-totals.csv">LA Times</a>
 </body>
 </html>

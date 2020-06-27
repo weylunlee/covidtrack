@@ -1,6 +1,6 @@
-const minDate = new Date('2020-03-15 00:00:00');
-const hospMinDate = new Date('2020-04-01 00:00:00');
-const citiesMinDate = new Date('2020-04-01 00:00:00');
+const MIN_DATE = new Date('2020-03-15 00:00:00');
+const HOSP_MIN_DATE = new Date('2020-04-01 00:00:00');
+const CITIES_MIN_DATE = new Date('2020-04-01 00:00:00');
 const COLOR_NEWCASES = '#9edafa';
 const COLOR_HOSP = '#a1dddd';
 const COLOR_DEATH = '#f6b4a2';
@@ -32,7 +32,7 @@ function createChartFromGit(countyName, chartName, avgType) {
             let count = [];
             // Filter only for specified county name and min date
             newConfirmedJson = JSC.csv2Json(data)
-                .filter(row => row.county == countyName && minDate <= stringToDate(row.date).getTime());
+                .filter(row => row.county == countyName && MIN_DATE <= stringToDate(row.date).getTime());
 
             newConfirmedJson.forEach(row => {
                     let newCases = row.new_confirmed_cases;
@@ -97,9 +97,9 @@ function chartForCities(cities, chartDiv, avgType) {
             }
 
             // Create chart for Cities New Cases, filter dates prior to Mar 15
-            newCount = newCount.filter(row => citiesMinDate <= stringToDate(row.x));
-            ma1 = ma1.filter(row => citiesMinDate <= stringToDate(row.x));
-            ma2 = ma2.filter(row => citiesMinDate <= stringToDate(row.x));
+            newCount = newCount.filter(row => CITIES_MIN_DATE <= stringToDate(row.x));
+            ma1 = ma1.filter(row => CITIES_MIN_DATE <= stringToDate(row.x));
+            ma2 = ma2.filter(row => CITIES_MIN_DATE <= stringToDate(row.x));
             createChart( 
             [
                 { type: 'column', bar_width: 1, color: COLOR_NEWCASES, name: 'New Cases', points: newCount },
@@ -163,7 +163,7 @@ function readHospitalizationDataFromSource(url, callback) {
                         let rawJson = $.parseJSON(this.innerHTML);
 
                         // Filter days before 4/1/2020
-                        rawJson = rawJson.filter(row => hospMinDate <= stringToDate(row.date));
+                        rawJson = rawJson.filter(row => HOSP_MIN_DATE <= stringToDate(row.date));
                         rawJson.forEach(row => {
                                 nonIcuJson.push({
                                     x: stringToDate(row.date),
@@ -197,9 +197,9 @@ function chartFromPageSource(countyName, url, avgType) {
         }
 
         // Create chart for New Cases, filter dates prior to Mar 15
-        newConfirmed = newConfirmed.filter(row => minDate <= stringToDate(row.x));
-        ma1 = ma1.filter(row => minDate <= stringToDate(row.x));
-        ma2 = ma2.filter(row => minDate <= stringToDate(row.x));
+        newConfirmed = newConfirmed.filter(row => MIN_DATE <= stringToDate(row.x));
+        ma1 = ma1.filter(row => MIN_DATE <= stringToDate(row.x));
+        ma2 = ma2.filter(row => MIN_DATE <= stringToDate(row.x));
         createChart( 
         [
             { type: 'column', bar_width: 1, color: COLOR_NEWCASES, name: 'New Cases', points: newConfirmed },
@@ -220,9 +220,9 @@ function chartFromPageSource(countyName, url, avgType) {
         }
 
         // Create chart for New Deaths, filter dates prior to Mar 15
-        newDeath = newDeath.filter(row => minDate <= stringToDate(row.x));
-        ma1 = ma1.filter(row => minDate <= stringToDate(row.x));
-        ma2 = ma2.filter(row => minDate <= stringToDate(row.x));
+        newDeath = newDeath.filter(row => MIN_DATE <= stringToDate(row.x));
+        ma1 = ma1.filter(row => MIN_DATE <= stringToDate(row.x));
+        ma2 = ma2.filter(row => MIN_DATE <= stringToDate(row.x));
         createChart( 
         [
             { type: 'column', bar_width: 1, color: COLOR_DEATH, name: 'New Deaths', points: newDeath },
@@ -248,11 +248,8 @@ function chartFromPageSource(countyName, url, avgType) {
             }
 
             // Add min date so that all charts have same time scale
-            let firstDate = stringToDate(nonIcu[0].x);
-            let startDate = new Date(minDate);
-
-            // startDate.setDate(startDate.getDate() + 1);
-            if (startDate < firstDate) {
+            let startDate = new Date(MIN_DATE);
+            if (startDate < stringToDate(nonIcu[0].x)) {
                 nonIcu.push({x: new Date(startDate), y: 0});
                 icu.push({x: new Date(startDate), y:0});
             }
