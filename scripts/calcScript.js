@@ -65,14 +65,13 @@ function calcMovingAverageForDay(i, count, days) {
 
 // Calculates exponential moving average for specified number of days
 function calcExpMovingAverage(count, days) {
-
     // Check if descending order. Assumes dates are not ordered randomly, and no missing dates!
     if (count.length > 1 && count[0].x > count[1].x) {
         count.reverse();
     }
 
     let movingAvg = [];
-    let prevEma = count.length >= days ? calcMovingAverageForDay(days-1, count, days) :0;
+    let prevEma = count.length >= days ? calcMovingAverageForDay(days-1, count, days) : 0;
     let mult = 2 / (days + 1);
 
     for (let i = days-1; i < count.length; i++) {

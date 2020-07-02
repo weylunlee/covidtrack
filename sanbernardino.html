@@ -6,39 +6,53 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=202006281707">
+<link rel="stylesheet" href="styles/indexStyle.css?v=202007020004">
 
-<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
+<script src="scripts/dom-to-image.min.js"></script>
 
-<script src="scripts/dataReader.js?202006281630"></script>
-<script src="scripts/calcScript.js?202006281630"></script>
-<script src="scripts/chartScript.js?v=202006281630"></script>
+<script src="scripts/dataReader.js?v=202007020004"></script>
+<script src="scripts/calcScript.js?v=202007020004"></script>
+<script src="scripts/chartScript.js?v=202007020004"></script>
 <script>
     chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA");
+
+    function screenShot() {
+        let t = getTimestampExt();
+        printDiv("#chartDiv", "SB_NewCases", t); 
+        setTimeout(() => {printDiv("#hospitalizationChartDiv", "SB_Hosp", t);}, 2000);
+        setTimeout(() => {printDiv("#deathsChartDiv", "SB_NewDeaths", t);}, 2000);
+    }
 </script>
 </head>
-<body class="page-container">
+<body>
     <div>
-        <div id="chartDiv" class="chartContent"></div>
-        <div id="hospitalizationChartDiv" class="chartContent"></div>
-        <div id="deathsChartDiv" class="chartContent"></div>
-
-        Raw data from <a href="https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-county-totals.csv">LA Times</a>
+        <input type="button" class="hidden-button"
+        id="SS" value="SS"
+        onclick='screenShot();'>
     </div>
+    <div class="page-container">
+        <div>
+            <div id="chartDiv" class="chartContent"></div>
+            <div id="hospitalizationChartDiv" class="chartContent"></div>
+            <div id="deathsChartDiv" class="chartContent"></div>
 
-    <div class="footer">
-        <div class="radio-toolbar">
-            <input type="radio" id="radioMa" name="avgType"
-                value="MA" checked
-                onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA")'>
-            <label for="radioMa">MA</label> 
-            <input type="radio"
-                id="radioEma" name="avgType" value="EMA"
-                onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "EMA")'>
-            <label for="radioEma">EMA</label>
+            Raw data from <a href="https://github.com/datadesk/california-coronavirus-data/blob/master/README.md">LA Times</a>
+        </div>
+
+        <div class="footer">
+            <div class="radio-toolbar">
+                <input type="radio" id="radioMa" name="avgType"
+                    value="MA" checked
+                    onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "MA")'>
+                <label for="radioMa">MA</label> 
+                <input type="radio"
+                    id="radioEma" name="avgType" value="EMA"
+                    onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", "EMA")'>
+                <label for="radioEma">EMA</label>
+            </div>
         </div>
     </div>
-    
 </body>
 </html>

@@ -1,5 +1,9 @@
+var cache_avgType;
+
 // Create the chart
-function createChart(series, divName, chartName) {
+function createChart(series, divName, chartName, avgType) {
+    cache_avgType = avgType;
+
     JSC.Chart(divName, {
         title: {
             position: 'center',
@@ -42,4 +46,43 @@ function createChart(series, divName, chartName) {
         },
         series: series
     });
+}
+
+// Capture image given div name
+function printDiv(div, imageName, timestamp) {
+    domtoimage.toPng($(div)[0])
+        .then(function (dataUrl) {
+            let img = dataUrl;
+            downloadURI(img, imageName + "_" + cache_avgType + "_" + timestamp + ".png");
+        })
+        .catch(function (error) {
+            console.error(error);
+        });
+}
+
+// Download the image to local
+function downloadURI(uri, name) {
+    let link = document.createElement("a");
+
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();  
+}
+
+// Get a timestamp string based on now
+function getTimestampExt() {
+    var d = new Date();
+    var timestamp = d.getFullYear().toString()
+        + "-" + pad((d.getMonth() + 1).toString())
+        + "-" + pad(d.getDate().toString())
+        + "_" + pad(d.getHours().toString())
+        + pad(d.getMinutes().toString())
+        + pad(d.getSeconds().toString());
+    return timestamp;
+}
+
+// Zero pad single char string
+function pad(x) {
+    return x.length == 1 ? '0' + x : x;
 }

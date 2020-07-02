@@ -1,16 +1,22 @@
-const MIN_DATE = new Date(2020, 2, 15, 0, 0, 0, 0);  // mar 15, 2020
-const HOSP_MIN_DATE = new Date(2020, 3, 1, 0, 0, 0, 0);  // apr 1, 2020
-const CITIES_MIN_DATE = new Date(2020, 3, 1, 0, 0, 0, 0);  // apr 1, 2020
-const COLOR_NEWCASES = '#9edafa';
-const COLOR_HOSP = '#a1dddd';
-const COLOR_DEATH = '#f6b4a2';
-const COLOR_ICU = '#d9d9d9';
-const COLOR_MA1 = '#486c9d';
-const COLOR_MA2 = '#cf5864';
-var newConfirmedJson;
-var nonIcuJson;
-var icuJson;
-var deathJson;
+const COLOR = {
+    NEW_CASES: '#9edafa',
+    HOSP: '#a1dddd',
+    DEATH: '#f6b4a2',
+    ICU: '#d9d9d9',
+    MA1: '#486c9d',
+    MA2: '#cf5864'
+}
+const DATE = {
+    MIN: new Date(2020, 2, 15, 0, 0, 0, 0),  // mar 15, 2020
+    MIN_HOSP: new Date(2020, 3, 1, 0, 0, 0, 0),  // apr 1, 2020
+    MIN_CITIES: new Date(2020, 3, 1, 0, 0, 0, 0)  // apr 1, 2020
+};
+var cache = {
+    newConfirmed: null,
+    nonIcu: null,
+    icu: null,
+    newDeath: null
+}; 
 
 //Convert string to date, taking into account time zone diff
 function stringToDate(dateString) {
@@ -37,7 +43,7 @@ function milliesToDate(millis) {
 //             let count = [];
 //             // Filter only for specified county name and min date
 //             newConfirmedJson = JSC.csv2Json(data)
-//                 .filter(row => row.county == countyName && MIN_DATE <= stringToDate(row.date));
+//                 .filter(row => row.county == countyName && DATE.MIN <= stringToDate(row.date));
 
 //             newConfirmedJson.forEach(row => {
 //                     let newCases = row.new_confirmed_cases;
@@ -53,23 +59,23 @@ function milliesToDate(millis) {
 // }
 
 function readChartForCities(callback) {
-    if (newConfirmedJson == null) {
+    if (cache.newConfirmed == null) {
         console.log("reading from git");
 
-        newConfirmedJson = [];
+        cache.newConfirmed = [];
         $.ajax({
             url: 'https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-place-totals.csv',
             type: 'GET',
             success: function (data) {
                 // convert to Json and filter only for min date
-                newConfirmedJson = JSC.csv2Json(data);
+                cache.newConfirmed = JSC.csv2Json(data);
 
-                callback(newConfirmedJson);
+                callback(cache.newConfirmed);
             }
         });
     }
     else {
-        callback(newConfirmedJson);
+        callback(cache.newConfirmed);
     }
 }
 
@@ -101,26 +107,26 @@ function chartForCities(cities, chartDiv, avgType) {
             }
 
             // Create chart for Cities New Cases, filter dates prior to Mar 15
-            newCount = newCount.filter(row => CITIES_MIN_DATE <= row.x);
-            ma1 = ma1.filter(row => CITIES_MIN_DATE <= row.x);
-            ma2 = ma2.filter(row => CITIES_MIN_DATE <= row.x);
+            newCount = newCount.filter(row => DATE.MIN_CITIES <= row.x);
+            ma1 = ma1.filter(row => DATE.MIN_CITIES <= row.x);
+            ma2 = ma2.filter(row => DATE.MIN_CITIES <= row.x);
             createChart( 
             [
-                { type: 'column', bar_width: 1, color: COLOR_NEWCASES, name: 'New Cases', points: newCount },
-                { type: 'line spline', line_width: 2, color: COLOR_MA1, name: '7-Day ' + avgType, points: ma1 },
-                { type: 'line spline', line_width: 2, color: COLOR_MA2, name: '14-Day ' + avgType, points: ma2 }
-            ], chartDiv + city, city + " New Cases by Day");
+                { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: newCount },
+                { type: 'line spline', line_width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, points: ma1 },
+                { type: 'line spline', line_width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, points: ma2 }
+            ], chartDiv + city, city + " New Cases by Day", avgType);
         });
     });
 }
 
 function readNewConfirmedAndDeathFromSource(url, callback) {
     // Check if cached
-    if (newConfirmedJson == null) {
+    if (cache.newConfirmed == null) {
         console.log("reading from source " + "timeseries" + " " + url);
 
-        newConfirmedJson = [];
-        deathJson = [];
+        cache.newConfirmed = [];
+        cache.newDeath = [];
         $.ajax({
             url: url,
             type: 'GET',
@@ -132,33 +138,33 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                         $.parseJSON(this.innerHTML)
                             .filter(row => (row.agencies_count == row.agencies_updated || row.in_progress == false ))
                             .forEach(row => {
-                                newConfirmedJson.push({
+                                cache.newConfirmed.push({
                                     x: stringToDate(row.date),
                                     y: row.new_confirmed_cases
                                 });
-                                deathJson.push({
+                                cache.newDeath.push({
                                     x: stringToDate(row.date),
                                     y: row.deaths
                                 });
                             });
                     }
                 });
-                callback(newConfirmedJson, deathJson);
+                callback(cache.newConfirmed, cache.newDeath);
             }
         });
     }
     else {
-        callback(newConfirmedJson, deathJson);
+        callback(cache.newConfirmed, cache.newDeath);
     }
 }
 
 function readHospitalizationDataFromSource(url, callback) {
     // Check if cached
-    if (nonIcuJson == null) {
+    if (cache.nonIcu == null) {
         console.log("reading from source " + "patients-timeseries" + " " + url);
 
-        nonIcuJson = [];
-        icuJson = [];
+        cache.nonIcu = [];
+        cache.icu = [];
         $.ajax({
             url: url,
             type: 'GET',
@@ -168,18 +174,18 @@ function readHospitalizationDataFromSource(url, callback) {
                         let rawJson = $.parseJSON(this.innerHTML);
 
                         // Filter days before 4/1/2020
-                        rawJson = rawJson.filter(row => HOSP_MIN_DATE <= stringToDate(row.date));
+                        rawJson = rawJson.filter(row => DATE.MIN_HOSP <= stringToDate(row.date));
 
                         rawJson.forEach(row => {
-                                nonIcuJson.push({
+                                cache.nonIcu.push({
                                     x: stringToDate(row.date),
                                     y: row.total_patients - row.total_icu_patients});
-                                icuJson.push({
+                                cache.icu.push({
                                     x: stringToDate(row.date),
                                     y: row.total_icu_patients});
                         });
 
-                        callback(nonIcuJson, icuJson);
+                        callback(cache.nonIcu, cache.icu);
                     }
                 })
             
@@ -187,7 +193,7 @@ function readHospitalizationDataFromSource(url, callback) {
         });
     }
     else {
-        callback(nonIcuJson, icuJson);
+        callback(cache.nonIcu, cache.icu);
     }
 }
 
@@ -205,15 +211,15 @@ function chartFromPageSource(countyName, url, avgType) {
         }
 
         // Create chart for New Cases, filter dates prior to Mar 15
-        newConfirmed = newConfirmed.filter(row => MIN_DATE <= row.x);
-        ma1 = ma1.filter(row => MIN_DATE <= row.x);
-        ma2 = ma2.filter(row => MIN_DATE <= row.x);
+        newConfirmed = newConfirmed.filter(row => DATE.MIN <= row.x);
+        ma1 = ma1.filter(row => DATE.MIN <= row.x);
+        ma2 = ma2.filter(row => DATE.MIN <= row.x);
         createChart( 
         [
-            { type: 'column', bar_width: 1, color: COLOR_NEWCASES, name: 'New Cases', points: newConfirmed },
-            { type: 'line spline', line_width: 3, color: COLOR_MA1, name: '7-Day ' + avgType, points: ma1 },
-            { type: 'line spline', line_width: 3, color: COLOR_MA2, name: '14-Day ' + avgType, points: ma2 }
-        ], "chartDiv", countyName + " New Cases by Day");
+            { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: newConfirmed },
+            { type: 'line spline', line_width: 3, color: COLOR.MA1, name: '7-Day ' + avgType, points: ma1 },
+            { type: 'line spline', line_width: 3, color: COLOR.MA2, name: '14-Day ' + avgType, points: ma2 }
+        ], "chartDiv", countyName + " New Cases by Day", avgType);
     
         let newDeath = calcNewFromCumulative(deathJson);
         ma1 = [];
@@ -228,15 +234,15 @@ function chartFromPageSource(countyName, url, avgType) {
         }
 
         // Create chart for New Deaths, filter dates prior to Mar 15
-        newDeath = newDeath.filter(row => MIN_DATE <= row.x);
-        ma1 = ma1.filter(row => MIN_DATE <= row.x);
-        ma2 = ma2.filter(row => MIN_DATE <= row.x);
+        newDeath = newDeath.filter(row => DATE.MIN <= row.x);
+        ma1 = ma1.filter(row => DATE.MIN <= row.x);
+        ma2 = ma2.filter(row => DATE.MIN <= row.x);
         createChart( 
         [
-            { type: 'column', bar_width: 1, color: COLOR_DEATH, name: 'New Deaths', points: newDeath },
-            { type: 'line spline', line_width: 3, color: COLOR_MA1, name: '7-Day ' + avgType, points: ma1 },
-            { type: 'line spline', line_width: 3, color: COLOR_MA2, name: '14-Day ' + avgType, points: ma2 }
-        ], "deathsChartDiv", countyName + " New Deaths by Day");
+            { type: 'column', bar_width: 1, color: COLOR.DEATH, name: 'New Deaths', points: newDeath },
+            { type: 'line spline', line_width: 3, color: COLOR.MA1, name: '7-Day ' + avgType, points: ma1 },
+            { type: 'line spline', line_width: 3, color: COLOR.MA2, name: '14-Day ' + avgType, points: ma2 }
+        ], "deathsChartDiv", countyName + " New Deaths by Day", avgType);
 
         readHospitalizationDataFromSource(url, function(hospCached, icuCached) {
             let nonIcu = [...hospCached];
@@ -256,18 +262,18 @@ function chartFromPageSource(countyName, url, avgType) {
             }
 
             // Add min date so that all charts have same time scale
-            if (MIN_DATE < nonIcu[0].x) {
-                nonIcu.push({x: MIN_DATE, y: 0});
-                icu.push({x: MIN_DATE, y:0});
+            if (DATE.MIN < nonIcu[0].x) {
+                nonIcu.push({x: DATE.MIN, y: 0});
+                icu.push({x: DATE.MIN, y:0});
             }
 
             createChart( 
             [
-                { type: 'column', bar_width: 1, color: COLOR_HOSP, name: 'Non-ICU', points: nonIcu},
-                { type: 'column', bar_width: 1, color: COLOR_ICU, name: 'ICU', points: icu },
-                { type: 'line spline', line_width: 3, color: COLOR_MA1, name: '7-Day ' + avgType, points: ma1 },
-                { type: 'line spline', line_width: 3, color: COLOR_MA2, name: '14-Day ' + avgType, points: ma2 }
-            ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day");
+                { type: 'column', bar_width: 1, color: COLOR.HOSP, name: 'Non-ICU', points: nonIcu },
+                { type: 'column', bar_width: 1, color: COLOR.ICU, name: 'ICU', points: icu },
+                { type: 'line spline', line_width: 3, color: COLOR.MA1, name: '7-Day ' + avgType, points: ma1 },
+                { type: 'line spline', line_width: 3, color: COLOR.MA2, name: '14-Day ' + avgType, points: ma2 }
+            ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day", avgType);
         });
     });
 }
