@@ -17,6 +17,7 @@ var cache = {
     icu: null,
     newDeath: null
 }; 
+var dateMax;
 
 //Convert string to date, taking into account time zone diff
 function stringToDate(dateString) {
@@ -138,14 +139,21 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                         $.parseJSON(this.innerHTML)
                             .filter(row => (row.agencies_count == row.agencies_updated || row.in_progress == false ))
                             .forEach(row => {
+                                let date = stringToDate(row.date);
+
                                 cache.newConfirmed.push({
-                                    x: stringToDate(row.date),
+                                    x: date,
                                     y: row.new_confirmed_cases
                                 });
                                 cache.newDeath.push({
-                                    x: stringToDate(row.date),
+                                    x: date,
                                     y: row.deaths
                                 });
+
+                                // save max date so that can push into hosp if necessary
+                                if (dateMax == null || dateMax < date) {
+                                    dateMax = date;
+                                }
                             });
                     }
                 });
@@ -264,7 +272,13 @@ function chartFromPageSource(countyName, url, avgType) {
             // Add min date so that all charts have same time scale
             if (DATE.MIN < nonIcu[0].x) {
                 nonIcu.push({x: DATE.MIN, y: 0});
-                icu.push({x: DATE.MIN, y:0});
+                icu.push({x: DATE.MIN, y: 0});
+            }
+
+            // Check if also need to add max date in case lagging from other charts
+            if (dateMax != null && dateMax > nonIcu[nonIcu.length-1].x) {
+                nonIcu.push({x: dateMax, y: 0});
+                icu.push({x: dateMax, y: 0});
             }
 
             createChart( 
