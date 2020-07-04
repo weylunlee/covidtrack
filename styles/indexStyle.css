@@ -20,7 +20,7 @@
 }
 
 .card-label {
-    font-size: 1.7em;
+    font-size: 3em;
 }
 
 .card-big-num {
@@ -108,8 +108,12 @@
         font-size: 2.75em;
     }
 
+    .card-label {
+        font-size: 1.3em;
+    }
+
     .card {
-        font-size: 0.8em;
+        font-size: .9em;
     }
 }
 
