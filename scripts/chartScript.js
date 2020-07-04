@@ -86,3 +86,21 @@ function getTimestampExt() {
 function pad(x) {
     return x.length == 1 ? '0' + x : x;
 }
+
+function render(template, node) {
+	$(node)[0].innerHTML = template;
+}
+
+function formatPlus(number, color) {
+    return number == null ? "Not yet avail" :
+        "<span style='color:" + color + "'><b>+" 
+            + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
+            + "</b></span>";
+}
+
+function format(number, color) {
+    return number == null ? "Not yet avail" :
+        "<span style='color:" + color + "'><b>" 
+            + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
+            + "</b></span>";
+}

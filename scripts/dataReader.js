@@ -4,8 +4,12 @@ const COLOR = {
     DEATH: '#f6b4a2',
     ICU: '#d9d9d9',
     MA1: '#486c9d',
-    MA2: '#cf5864'
-}
+    MA2: '#cf5864',
+    CARD_CASES: '#0b92da',
+    CARD_DEATHS: '#ed6a45',
+    CARD_NONICU: '#3da9a9',
+    CARD_ICU: '#808080'
+};
 const DATE = {
     MIN: new Date(2020, 2, 15, 0, 0, 0, 0),  // mar 15, 2020
     MIN_HOSP: new Date(2020, 3, 1, 0, 0, 0, 0),  // apr 1, 2020
@@ -18,11 +22,43 @@ var cache = {
     newDeath: null
 }; 
 var dateMax;
+var cardDataCases;
+var cardDataDeaths;
 
-//Convert string to date, taking into account time zone diff
+// Initialize
+var dateToday = new Date();
+var dateYest = new Date(dateToday.getFullYear(), dateToday.getMonth(), dateToday.getDate() -1);
+var dateBefore = new Date(dateToday.getFullYear(), dateToday.getMonth(), dateToday.getDate() -2);
+const DAY_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+cardDataCases = {
+    totalCount: null, 
+    todayCount: null, 
+    yestCount: null, 
+    beforeCount: null};
+cardDataDeaths = {
+    totalCount: null, 
+    todayCount: null, 
+    yestCount: null,
+    beforeCount: null};
+cardDataHosp = {
+    nonIcuTotalCount: null, 
+    nonIcuTodayCount: null, 
+    nonIcuYestCount: null,
+    nonIcuBeforeCount: null,
+    icuTotalCount: null, 
+    icuTodayCount: null, 
+    icuYestCount: null,
+    icuBeforeCount: null};
+
+// Convert string to date, taking into account time zone diff
 function stringToDate(dateString) {
     let parts = dateString.split('-');
     return new Date(parts[0], parts[1] - 1, parts[2], 0, 0, 0, 0); 
+}
+
+function dateEqual(d1, d2) {
+    return d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate() && d1.getFullYear() == d2.getFullYear();
 }
 
 function milliesToDate(millis) {
@@ -140,7 +176,6 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                             .filter(row => (row.agencies_count == row.agencies_updated || row.in_progress == false ))
                             .forEach(row => {
                                 let date = stringToDate(row.date);
-
                                 cache.newConfirmed.push({
                                     x: date,
                                     y: row.new_confirmed_cases
@@ -154,9 +189,12 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                                 if (dateMax == null || dateMax < date) {
                                     dateMax = date;
                                 }
+
+                                saveDataForCasesAndDeathsCards(row);
                             });
                     }
                 });
+
                 callback(cache.newConfirmed, cache.newDeath);
             }
         });
@@ -191,12 +229,17 @@ function readHospitalizationDataFromSource(url, callback) {
                                 cache.icu.push({
                                     x: stringToDate(row.date),
                                     y: row.total_icu_patients});
+
+                                saveDataForHospCard(row);
                         });
+
+                        showCasesOrDeathsCard(cardDataCases, "Confirmed Cases", "#casesCard", COLOR.CARD_CASES);
+                        showHospCard(cardDataHosp, "In Hospitals", "#hospCard", COLOR.CARD_NONICU, COLOR.CARD_ICU);
+                        showCasesOrDeathsCard(cardDataDeaths, "Deaths", "#deathsCard", COLOR.CARD_DEATHS);
 
                         callback(cache.nonIcu, cache.icu);
                     }
                 })
-            
             }
         });
     }
@@ -290,4 +333,79 @@ function chartFromPageSource(countyName, url, avgType) {
             ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day", avgType);
         });
     });
+}
+
+function saveDataForCasesAndDeathsCards(row) {
+    let date = stringToDate(row.date);
+
+    // save data for days
+    if (dateEqual(dateBefore, date)) {
+        cardDataCases.beforeCount = row.new_confirmed_cases;
+        cardDataDeaths.beforeCount = row.new_deaths;
+
+        cardDataCases.totalCount = row.confirmed_cases;
+        cardDataDeaths.totalCount = row.deaths;
+    }
+    else if (dateEqual(dateToday, date)) {
+        cardDataCases.todayCount = row.new_confirmed_cases;
+        cardDataDeaths.todayCount = row.new_deaths;
+
+        cardDataCases.totalCount = row.confirmed_cases;
+        cardDataDeaths.totalCount = row.deaths;
+    }
+    else if (dateEqual(dateYest, date)) {
+        cardDataCases.yestCount = row.new_confirmed_cases;
+        cardDataDeaths.yestCount = row.new_deaths;
+
+        cardDataCases.totalCount = row.confirmed_cases;
+        cardDataDeaths.totalCount = row.deaths;
+    }
+}
+
+function saveDataForHospCard(row) {
+    let date = stringToDate(row.date);
+
+    // Assume we are processing in date ascending order
+    if (dateEqual(dateBefore, date)) {
+        cardDataHosp.nonIcuBeforeCount = row.total_patients - row.total_icu_patients;
+        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
+
+        cardDataHosp.icuBeforeCount = row.total_icu_patients;
+        cardDataHosp.icuTotalCount = row.total_icu_patients;
+    }
+    else if (dateEqual(dateYest, date)) {
+        cardDataHosp.nonIcuYestCount = row.total_patients - row.total_icu_patients;
+        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
+
+        cardDataHosp.icuYestCount = row.total_icu_patients;
+        cardDataHosp.icuTotalCount = row.total_icu_patients;
+    }
+    else if (dateEqual(dateToday, date)) {
+        cardDataHosp.nonIcuTodayCount = row.total_patients - row.total_icu_patients;
+        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
+
+        cardDataHosp.icuTodayCount = row.total_icu_patients;
+        cardDataHosp.icuTotalCount = row.total_icu_patients;
+    }
+}
+
+function showCasesOrDeathsCard(cardData, label, cardDiv, color) {
+    render("<span style='font-size:30px'>" + format(cardData.totalCount, color) + "</span><br>" + label + "<br><br>" 
+        + formatPlus(cardData.todayCount, color) + " Today<br>"
+        + formatPlus(cardData.yestCount, color) + " " + DAY_OF_WEEK[dateYest.getDay()] +"<br>"
+        + formatPlus(cardData.beforeCount, color) + " " + DAY_OF_WEEK[dateBefore.getDay()], 
+        cardDiv);
+}
+ 
+function showHospCard(cardData, label, cardDiv, nonIcuColor, icuColor) {
+    let todayString = cardData.nonIcuTodayCount == null || cardData.icuTodayCount == null 
+        ? format(cardData.nonIcuTodayCount, nonIcuColor) 
+        : format(cardData.nonIcuTodayCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuTodayCount, icuColor) + " ICU"; 
+
+    render("<span style='font-size:30px'>" + format(cardData.nonIcuTotalCount, nonIcuColor) 
+        + "</span> Non-ICU / <span style='font-size:30px'>" + format(cardData.icuTotalCount, icuColor) + "</span> ICU <br>" + label + "<br><br>" 
+        + todayString + " Today<br>"
+        + format(cardData.nonIcuYestCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuYestCount, icuColor) + " ICU " + DAY_OF_WEEK[dateYest.getDay()] +"<br>"
+        + format(cardData.nonIcuBeforeCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuBeforeCount, icuColor) + " ICU " + DAY_OF_WEEK[dateBefore.getDay()], 
+        cardDiv);
 }
