@@ -390,7 +390,7 @@ function saveDataForHospCard(row) {
 }
 
 function showCasesOrDeathsCard(cardData, label, cardDiv, color) {
-    render("<span style='font-size:30px'>" + format(cardData.totalCount, color) + "</span><br>" + label + "<br><br>" 
+    render("<span style='font-size:35px'>" + format(cardData.totalCount, color) + "</span><br>" + label + "<br><br>" 
         + formatPlus(cardData.todayCount, color) + " Today<br>"
         + formatPlus(cardData.yestCount, color) + " " + DAY_OF_WEEK[dateYest.getDay()] +"<br>"
         + formatPlus(cardData.beforeCount, color) + " " + DAY_OF_WEEK[dateBefore.getDay()], 
@@ -402,8 +402,8 @@ function showHospCard(cardData, label, cardDiv, nonIcuColor, icuColor) {
         ? format(cardData.nonIcuTodayCount, nonIcuColor) 
         : format(cardData.nonIcuTodayCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuTodayCount, icuColor) + " ICU"; 
 
-    render("<span style='font-size:30px'>" + format(cardData.nonIcuTotalCount, nonIcuColor) 
-        + "</span> Non-ICU / <span style='font-size:30px'>" + format(cardData.icuTotalCount, icuColor) + "</span> ICU <br>" + label + "<br><br>" 
+    render("<span style='font-size:35px'>" + format(cardData.nonIcuTotalCount, nonIcuColor) 
+        + "</span> Non-ICU / <span style='font-size:35px'>" + format(cardData.icuTotalCount, icuColor) + "</span> ICU <br>" + label + "<br><br>" 
         + todayString + " Today<br>"
         + format(cardData.nonIcuYestCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuYestCount, icuColor) + " ICU " + DAY_OF_WEEK[dateYest.getDay()] +"<br>"
         + format(cardData.nonIcuBeforeCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuBeforeCount, icuColor) + " ICU " + DAY_OF_WEEK[dateBefore.getDay()], 
