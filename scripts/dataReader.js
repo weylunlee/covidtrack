@@ -117,18 +117,18 @@ function readChartForCities(callback) {
 }
 
 function chartForCities(cities, chartDiv, avgType) {
-    readChartForCities(function(commulativeConfirmed) {
+    readChartForCities(function(cummulativeConfirmed) {
         cities.forEach(city => {
-            let count = [];
-            commulativeConfirmed
-                .filter(row => row.place == city)
-                .forEach(row => {
-                    let cases = row.confirmed_cases;
-                    count.push({
-                        x: milliesToDate(row.date),
-                        y: cases == null || cases == undefined ? 0 : parseInt(cases, 10)
-                    });
-                });
+            let cityCummulative = cummulativeConfirmed.filter(row => row.place == city);
+            let count = new Array(cityCummulative.length);
+
+            for (let i=0; i<cityCummulative.length; i++) {
+                let cases = cityCummulative[i].confirmed_cases;
+                count[i] = {
+                    x: milliesToDate(cityCummulative[i].date),
+                    y: cases == null || cases == undefined ? 0 : parseInt(cases, 10)
+                };
+            }
 
             let newCount = calcNewFromCumulative(count);
 
@@ -172,26 +172,25 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                     if (this.id == "timeseries") {
 
                         // parse json and filter for min date and data finalization
-                        $.parseJSON(this.innerHTML)
-                            .filter(row => (row.agencies_count == row.agencies_updated || row.in_progress == false ))
-                            .forEach(row => {
-                                let date = stringToDate(row.date);
-                                cache.newConfirmed.push({
-                                    x: date,
-                                    y: row.new_confirmed_cases
-                                });
-                                cache.newDeath.push({
-                                    x: date,
-                                    y: row.deaths
-                                });
+                        let rawJson = $.parseJSON(this.innerHTML)
+                            .filter(row => (row.agencies_count == row.agencies_updated || row.in_progress == false ));
+
+                        cache.newConfirmed = new Array(rawJson.length);
+                        cache.newDeath = new Array(rawJson.length);
+
+                            for (let i=0; i<rawJson.length; i++) {
+                                let date = stringToDate(rawJson[i].date);
+
+                                cache.newConfirmed[i] = {x: date, y: rawJson[i].new_confirmed_cases};
+                                cache.newDeath[i] = {x: date, y: rawJson[i].deaths};
 
                                 // save max date so that can push into hosp if necessary
                                 if (dateMax == null || dateMax < date) {
                                     dateMax = date;
                                 }
 
-                                saveDataForCasesAndDeathsCards(row);
-                            });
+                                saveDataForCasesAndDeathsCards(rawJson[i]);
+                            }
                     }
                 });
 
@@ -222,16 +221,14 @@ function readHospitalizationDataFromSource(url, callback) {
                         // Filter days before 4/1/2020
                         rawJson = rawJson.filter(row => DATE.MIN_HOSP <= stringToDate(row.date));
 
-                        rawJson.forEach(row => {
-                                cache.nonIcu.push({
-                                    x: stringToDate(row.date),
-                                    y: row.total_patients - row.total_icu_patients});
-                                cache.icu.push({
-                                    x: stringToDate(row.date),
-                                    y: row.total_icu_patients});
+                        cache.nonIcu = new Array(rawJson.length);
+                        cache.icu = new Array(rawJson.length);
 
-                                saveDataForHospCard(row);
-                        });
+                        for (let i=0; i<rawJson.length; i++) {
+                            cache.nonIcu[i] = {x: stringToDate(rawJson[i].date), y: rawJson[i].total_patients - rawJson[i].total_icu_patients};
+                            cache.icu[i] = {x: stringToDate(rawJson[i].date), y: rawJson[i].total_icu_patients};
+                            saveDataForHospCard(rawJson[i]);
+                        }
 
                         showCasesOrDeathsCard(cardDataCases, "Confirmed Cases", "#casesCard", COLOR.CARD_CASES);
                         showHospCard(cardDataHosp, "In Hospitals", "#hospCard", COLOR.CARD_NONICU, COLOR.CARD_ICU);
@@ -346,16 +343,16 @@ function saveDataForCasesAndDeathsCards(row) {
         cardDataCases.totalCount = row.confirmed_cases;
         cardDataDeaths.totalCount = row.deaths;
     }
-    else if (dateEqual(dateToday, date)) {
-        cardDataCases.todayCount = row.new_confirmed_cases;
-        cardDataDeaths.todayCount = row.new_deaths;
+    else if (dateEqual(dateYest, date)) {
+        cardDataCases.yestCount = row.new_confirmed_cases;
+        cardDataDeaths.yestCount = row.new_deaths;
 
         cardDataCases.totalCount = row.confirmed_cases;
         cardDataDeaths.totalCount = row.deaths;
     }
-    else if (dateEqual(dateYest, date)) {
-        cardDataCases.yestCount = row.new_confirmed_cases;
-        cardDataDeaths.yestCount = row.new_deaths;
+    else if (dateEqual(dateToday, date)) {
+        cardDataCases.todayCount = row.new_confirmed_cases;
+        cardDataDeaths.todayCount = row.new_deaths;
 
         cardDataCases.totalCount = row.confirmed_cases;
         cardDataDeaths.totalCount = row.deaths;
@@ -368,23 +365,23 @@ function saveDataForHospCard(row) {
     // Assume we are processing in date ascending order
     if (dateEqual(dateBefore, date)) {
         cardDataHosp.nonIcuBeforeCount = row.total_patients - row.total_icu_patients;
-        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
-
         cardDataHosp.icuBeforeCount = row.total_icu_patients;
+        
+        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
         cardDataHosp.icuTotalCount = row.total_icu_patients;
     }
     else if (dateEqual(dateYest, date)) {
         cardDataHosp.nonIcuYestCount = row.total_patients - row.total_icu_patients;
-        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
-
         cardDataHosp.icuYestCount = row.total_icu_patients;
+        
+        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
         cardDataHosp.icuTotalCount = row.total_icu_patients;
     }
     else if (dateEqual(dateToday, date)) {
         cardDataHosp.nonIcuTodayCount = row.total_patients - row.total_icu_patients;
-        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
-
         cardDataHosp.icuTodayCount = row.total_icu_patients;
+
+        cardDataHosp.nonIcuTotalCount = row.total_patients - row.total_icu_patients;
         cardDataHosp.icuTotalCount = row.total_icu_patients;
     }
 }
