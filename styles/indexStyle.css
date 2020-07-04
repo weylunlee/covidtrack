@@ -19,6 +19,10 @@
     padding: 1rem;
 }
 
+.card-label {
+    font-size: 1.7em;
+}
+
 .card-big-num {
     font-size: 5em;
 }
