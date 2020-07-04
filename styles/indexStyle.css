@@ -14,7 +14,7 @@
     text-align: center;
     background-color: #f2f2f2;
     color: #999999;
-    font-size: large;
+    font-size: 1.5em;
     font-family: Arial, Helvetica, sans-serif;
     padding: 1rem;
 }
@@ -68,7 +68,7 @@
     background-color: #f2f2f2;
     margin: 5px;
     font-family: sans-serif, Arial;
-    font-size: xx-large;
+    font-size: 2.5em;
     border: 3px solid #f2f2f2;
     border-radius: 50px;
     transition: all 0.3s ease-in;
@@ -84,7 +84,7 @@
     border: 3px solid #ffd480;
 }
 
-@media only screen and (min-width: 1070px) {
+@media only screen and (min-width: 1090px) {
     .radio-toolbar label {
         width: auto;
         padding: 3px 20px;
