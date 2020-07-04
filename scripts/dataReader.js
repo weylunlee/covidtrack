@@ -398,14 +398,16 @@ function showCasesOrDeathsCard(cardData, label, cardDiv, color) {
 }
  
 function showHospCard(cardData, label, cardDiv, nonIcuColor, icuColor) {
-    let todayString = cardData.nonIcuTodayCount == null || cardData.icuTodayCount == null 
-        ? format(cardData.nonIcuTodayCount, nonIcuColor) 
-        : format(cardData.nonIcuTodayCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuTodayCount, icuColor) + " ICU"; 
-
     render("<span class='card-big-num'>" + format(cardData.nonIcuTotalCount, nonIcuColor) 
         + "</span> Non-ICU / <span class='card-big-num'>" + format(cardData.icuTotalCount, icuColor) + "</span> ICU <br><span class='card-label'>" + label + "</span><br><br>" 
-        + todayString + " Today<br>"
-        + format(cardData.nonIcuYestCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuYestCount, icuColor) + " ICU " + DAY_OF_WEEK[dateYest.getDay()] +"<br>"
-        + format(cardData.nonIcuBeforeCount, nonIcuColor) + " Non-ICU / " + format(cardData.icuBeforeCount, icuColor) + " ICU " + DAY_OF_WEEK[dateBefore.getDay()], 
+        + getHospCardDayString(cardData.nonIcuTodayCount, cardData.icuTodayCount, nonIcuColor, icuColor) + " Today<br>"
+        + getHospCardDayString(cardData.nonIcuYestCount, cardData.icuYestCount, nonIcuColor, icuColor) + " " +DAY_OF_WEEK[dateYest.getDay()] +"<br>"
+        + getHospCardDayString(cardData.nonIcuBeforeCount, cardData.icuBeforeCount, nonIcuColor, icuColor) + " " + DAY_OF_WEEK[dateBefore.getDay()], 
         cardDiv);
+} 
+
+function getHospCardDayString(nonIcuCount, icuCount, nonIcuColor, icuColor) {
+    return nonIcuCount == null || icuCount == null 
+    ? format(nonIcuCount, nonIcuColor) 
+    : format(nonIcuCount, nonIcuColor) + " Non-ICU / " + format(icuCount, icuColor) + " ICU"; 
 }
