@@ -333,29 +333,29 @@ function chartFromPageSource(countyName, url, avgType) {
 }
 
 function saveDataForCasesAndDeathsCards(row) {
+
+    if (cardDataCases.totalCount == null || cardDataCases.totalCount < row.confirmed_cases) {
+        cardDataCases.totalCount = row.confirmed_cases;
+    }
+
+    if (cardDataDeaths.totalCount == null || cardDataDeaths.totalCount < row.deaths) {
+        cardDataDeaths.totalCount = row.deaths;
+    }
+
     let date = stringToDate(row.date);
 
     // save data for days
     if (dateEqual(dateBefore, date)) {
         cardDataCases.beforeCount = row.new_confirmed_cases;
         cardDataDeaths.beforeCount = row.new_deaths;
-
-        cardDataCases.totalCount = row.confirmed_cases;
-        cardDataDeaths.totalCount = row.deaths;
     }
     else if (dateEqual(dateYest, date)) {
         cardDataCases.yestCount = row.new_confirmed_cases;
         cardDataDeaths.yestCount = row.new_deaths;
-
-        cardDataCases.totalCount = row.confirmed_cases;
-        cardDataDeaths.totalCount = row.deaths;
     }
     else if (dateEqual(dateToday, date)) {
         cardDataCases.todayCount = row.new_confirmed_cases;
         cardDataDeaths.todayCount = row.new_deaths;
-
-        cardDataCases.totalCount = row.confirmed_cases;
-        cardDataDeaths.totalCount = row.deaths;
     }
 }
 
