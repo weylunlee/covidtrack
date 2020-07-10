@@ -152,7 +152,7 @@ function chartForCities(cities, chartDiv, avgType) {
                 { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: newCount },
                 { type: 'line spline', line_width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, points: ma1 },
                 { type: 'line spline', line_width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, points: ma2 }
-            ], chartDiv + city, city + " New Cases by Day", avgType);
+            ], chartDiv + city, city, avgType);
         });
     });
 }
