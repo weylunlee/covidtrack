@@ -1,3 +1,16 @@
+const COLOR = {
+    NEW_CASES: '#9edafa',
+    HOSP: '#a1dddd',
+    DEATH: '#f6b4a2',
+    ICU: '#d9d9d9',
+    MA1: '#486c9d',
+    MA2: '#cf5864',
+    CARD_CASES: '#0b92da',
+    CARD_DEATHS: '#ed6a45',
+    CARD_NONICU: '#3da9a9',
+    CARD_ICU: '#808080'
+};
+
 var cache_avgType;
 
 // Create the chart
