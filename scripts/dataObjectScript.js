@@ -119,5 +119,6 @@ class CityData extends Data {
     constructor() {
         super();
         let city = null;
+        let total = null;
     }
 }

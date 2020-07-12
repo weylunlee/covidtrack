@@ -40,6 +40,7 @@ function chartForCities(cities, chartDiv, avgType) {
                     };
                 }
 
+                cityCases.total = cityCases.count[0].y;
                 cityCases.count = calcNewFromCumulative(cityCases.count);
                 cityCases.calcMovingAverages();
                 cityCases.truncateDatesPrior(DATE.MIN_CITIES);
@@ -55,11 +56,11 @@ function chartForCities(cities, chartDiv, avgType) {
 
 function createChartForCities(chartDiv, avgType) {
     dataList.forEach(cityCases => {
-        createChart(
+        createCityChart(
             [
                 { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: cityCases.count },
                 { type: 'line spline', line_width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, points: cityCases.getMa1(avgType) },
                 { type: 'line spline', line_width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, points: cityCases.getMa2(avgType) }
-            ], chartDiv + cityCases.city, cityCases.city, avgType);        
+            ], chartDiv + cityCases.city, cityCases.city, avgType, cityCases.total);        
     });
 }

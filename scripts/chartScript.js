@@ -61,6 +61,51 @@ function createChart(series, divName, chartName, avgType) {
     });
 }
 
+// Create the chart for city
+function createCityChart(series, divName, chartName, avgType, total) {
+    cache_avgType = avgType;
+
+    JSC.Chart(divName, {
+        annotations: [ 
+            { position: 'top', label_text: '<span style="justify-content: center; font-size: 23px;">' + chartName + '  </span>'},
+            { position: 'top', label_text: '<span style="font-size: 30px; fill: #0b92da; font-family:Arial, Helvetica, sans-serif; font-weight: bold">' + total + '</span> Confirmed Cases' }
+        ], 
+        defaultPoint: {
+            marker_visible: false,
+            tooltip: '<span style="width:125px">%seriesName</span> %icon {%yvalue:n0}'
+        },
+        yAxis: [{id: 'mainY', formatString: 'n0', scale_type: 'stacked'},
+        {
+            id: 'secondY',
+            scale_syncWith: 'mainY',
+            orientation: 'opposite',
+            line_color: '#e2e2e2',
+            defaultTick: {
+                enabled: false,
+                gridLine_visible: false
+            }
+        }
+        ],
+        xAxis: {
+            scale_type: "time",
+            defaultTick_enabled: true,
+            crosshair_enabled: true,
+            formatString: 'MMM d',
+            scale: {
+                interval: {
+                    unit: "day",
+                    multiplier: 7
+                },
+            }
+        },
+        legend: {
+            position: 'inside top',
+            template: '%icon %name'
+        },
+        series: series
+    });
+}
+
 // Capture image given div name
 function printDiv(div, imageName, timestamp) {
     domtoimage.toPng($(div)[0])
