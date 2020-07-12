@@ -1,3 +1,12 @@
+class CardData {
+    constructor() {
+        let totalCount = null;
+        let todayCount = null;
+        let yestCount = null;
+        let beforeCount = null;
+    }
+}
+
 class Data {
     constructor() {
         let count = null;
@@ -7,7 +16,7 @@ class Data {
         let maExponential2 = null;
     }
 
-    calcMovingAverage() {
+    calcMovingAverages() {
         this.maSimple1 = this.calcSimpleMovingAverage(7);
         this.maSimple2 = this.calcSimpleMovingAverage(14);
         this.maExponential1 = this.calcExponentialMovingAverage(7);
@@ -18,12 +27,8 @@ class Data {
         this.count = this.count.filter((row) => date <= row.x);
         this.maSimple1 = this.maSimple1.filter((row) => date <= row.x);
         this.maSimple2 = this.maSimple2.filter((row) => date <= row.x);
-        this.maExponential1 = this.maExponential1.filter(
-            (row) => date <= row.x
-        );
-        this.maExponential2 = this.maExponential2.filter(
-            (row) => date <= row.x
-        );
+        this.maExponential1 = this.maExponential1.filter((row) => date <= row.x);
+        this.maExponential2 = this.maExponential2.filter((row) => date <= row.x);
     }
 
     padDatePrior(date) {
@@ -109,44 +114,10 @@ class Data {
         return movingAvg;
     }
 } // end class data
- 
-var dataCases = new Data();
-var dataDeaths = new Data();
-var dataNonIcu = new Data();
-var dataIcu = new Data();
-var dataHospComb = new Data();
 
-// Calculates new confirmed based on daily cumulative confirmed
-function calcNewFromCumulative(count) {
-    let newCount = new Array(count.length);
-
-    // Check if descending order. Assumes dates are not ordered randomly, and no missing dates!
-    if (count.length > 1 && count[0].x > count[1].x) {
-        count.reverse();
+class CityData extends Data {
+    constructor() {
+        super();
+        let city = null;
     }
-
-    // Start with 0
-    newCount[0] = { 
-        x: count[0].x, 
-        y: 0 };
-
-    for (let i = 1; i < count.length; i++) {
-        // If next day is less than previous day, use previous day
-        newCount[i] = {
-            x: count[i].x,
-            y: count[i].y < count[i - 1].y ? 0 : count[i].y - count[i - 1].y
-        };
-    }
-
-    return newCount;
 }
-
-function combineHospitalizations(nonIcu, icu) {
-    let combined = new Array(nonIcu.length);
-    for (let i=0; i<nonIcu.length; i++) {
-        combined[i] = {x: nonIcu[i].x, y: nonIcu[i].y + icu[i].y};
-    }
-
-    return combined;
-}
-
