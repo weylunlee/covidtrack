@@ -61,6 +61,6 @@ function createChartForCities(chartDiv, avgType) {
                 { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: cityCases.count },
                 { type: 'line spline', line_width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, points: cityCases.getMa1(avgType) },
                 { type: 'line spline', line_width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, points: cityCases.getMa2(avgType) }
-            ], chartDiv + cityCases.city, cityCases.city, avgType, cityCases.total);        
+            ], chartDiv + cityCases.city, cityCases.city, avgType, formatNumberWithComma(cityCases.total));        
     });
 }

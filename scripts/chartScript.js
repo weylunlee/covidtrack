@@ -152,13 +152,17 @@ function render(template, node) {
 function formatPlus(number, color) {
     return number == null ? "Not yet avail" :
         "<span style='color:" + color + "'><b>+" 
-            + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
-            + "</b></span>";
+        + formatNumberWithComma(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) 
+        + "</b></span>";
 }
 
 function format(number, color) {
     return number == null ? "Not yet avail" :
         "<span style='color:" + color + "'><b>" 
-            + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
-            + "</b></span>";
+        + formatNumberWithComma(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) 
+        + "</b></span>";
+}
+
+function formatNumberWithComma(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
