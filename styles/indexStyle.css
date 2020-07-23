@@ -20,7 +20,7 @@
 }
 
 .card-label {
-    font-size: 3em;
+    font-size: 2.9em;
     font-weight: bold;
 }
 
@@ -81,7 +81,7 @@
     border: 3px solid #f2f2f2;
     border-radius: 50px;
     transition: all 0.3s ease-in;
-    width: 40%;
+    width: 35%;
 }
 
 .radio-toolbar label:hover {
