@@ -180,28 +180,28 @@ function saveDataForCasesAndDeathsCards(row) {
 
 function saveDataForHospCard(row) {
     let date = stringToDate(row.date);
+    
+    // Use latest date for the main numbers
+    if (cardDataNonIcu.date == null || cardDataNonIcu.date.getTime() < date.getTime()) {
+        cardDataNonIcu.totalCount = row.total_patients - row.total_icu_patients;
+        cardDataIcu.totalCount = row.total_icu_patients;
+        
+        cardDataNonIcu.date = date;
+        cardDataIcu.date = date;
+    }
 
     // Assume we are processing in date ascending order
     if (dateEqual(dateBefore, date)) {
         cardDataNonIcu.beforeCount = row.total_patients - row.total_icu_patients;
         cardDataIcu.beforeCount = row.total_icu_patients;
-        
-        cardDataNonIcu.totalCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.totalCount = row.total_icu_patients;
     }
     else if (dateEqual(dateYest, date)) {
         cardDataNonIcu.yestCount = row.total_patients - row.total_icu_patients;
         cardDataIcu.yestCount = row.total_icu_patients;
-        
-        cardDataNonIcu.totalCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.totalCount = row.total_icu_patients;
     }
     else if (dateEqual(dateToday, date)) {
         cardDataNonIcu.todayCount = row.total_patients - row.total_icu_patients;
         cardDataIcu.todayCount = row.total_icu_patients;
-
-        cardDataNonIcu.totalCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.totalCount = row.total_icu_patients;
     }
 }
 

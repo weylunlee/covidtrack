@@ -1,5 +1,6 @@
 class CardData {
     constructor() {
+        let date = null;
         let totalCount = null;
         let todayCount = null;
         let yestCount = null;
