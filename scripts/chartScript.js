@@ -45,7 +45,7 @@ function createChart(series, divName, chartName, avgType) {
             scale_type: "time",
             defaultTick_enabled: true,
             crosshair_enabled: true,
-            formatString: 'MMM d',
+            formatString: 'MMM<br>d',
             scale: {
                 interval: {
                     unit: "day",
