@@ -76,7 +76,7 @@ function createChart(series, divName, chartName, avgType) {
         margin: {
             t: 50,
             r: 0,
-            l: 30
+            l: 31
         }
     };
       
