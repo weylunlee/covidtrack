@@ -17,6 +17,17 @@ class Data {
         let maExponential2 = null;
     }
 
+    getMax() {
+        let max = 0;
+        for (let i=0; i<this.count.length; i++) {
+            if (max < count[i.y]) {
+                max = count[i.y];
+            }
+        }
+
+        return max;
+    }
+
     calcMovingAverages() {
         this.maSimple1 = this.calcSimpleMovingAverage(7);
         this.maSimple2 = this.calcSimpleMovingAverage(14);

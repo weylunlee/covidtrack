@@ -6,16 +6,16 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=202007221813">
+<link rel="stylesheet" href="styles/indexStyle.css?v=202102122123">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 <script src="scripts/dom-to-image.min.js"></script>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 
-<script src="scripts/dataObjectScript.js?v=202008081219"></script>
-<script src="scripts/utilityScript.js?v=202007241732"></script>
-<script src="scripts/dataReaderScript.js?v=202008081219"></script>
-<script src="scripts/chartScript.js?v=202011232205"></script>
+<script src="scripts/dataObjectScript.js?v=202102122123"></script>
+<script src="scripts/utilityScript.js?v=202102122123"></script>
+<script src="scripts/dataReaderScript.js?v=202102122123"></script>
+<script src="scripts/chartScript.js?v=202102122123"></script>
 <script>
     chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", "MA");
 
@@ -25,6 +25,7 @@
         setTimeout(() => {printDiv("#hospitalizationChartDiv", "LA_Hosp", t);}, 2000);
         setTimeout(() => {printDiv("#deathsChartDiv", "LA_NewDeaths", t);}, 2000);
     }
+
 </script> 
 </head>
 <body>

@@ -12,7 +12,7 @@ function readChartForCities(callback) {
         url: 'https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/latimes-place-totals.csv',
         type: 'GET',
         success: function (data) {
-            // convert to Json and filter only for min date
+            // convert to Json
             count = JSC.csv2Json(data);
 
             callback(count);
@@ -58,9 +58,12 @@ function createChartForCities(chartDiv, avgType) {
     dataList.forEach(cityCases => {
         createCityChart(
             [
-                { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: cityCases.count },
-                { type: 'line spline', line_width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, points: cityCases.getMa1(avgType) },
-                { type: 'line spline', line_width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, points: cityCases.getMa2(avgType) }
+                { type: 'bar', width: 1, color: COLOR.NEW_CASES, name: 'New Cases', 
+                    pointsX: cityCases.count.map(p => p.x), pointsY: cityCases.count.map(p => p.y) },
+                { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+                    pointsX: cityCases.getMa1(avgType).map(p => p.x), pointsY: cityCases.getMa1(avgType).map(p => p.y) },
+                { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+                    pointsX: cityCases.getMa2(avgType).map(p => p.x), pointsY: cityCases.getMa2(avgType).map(p => p.y) }
             ], chartDiv + cityCases.city, cityCases.city, avgType, formatNumberWithComma(cityCases.total));        
     });
 }

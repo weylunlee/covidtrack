@@ -92,6 +92,7 @@ function readHospitalizationDataFromSource(url, callback) {
                         for (let i=0; i<rawJson.length; i++) {
                             dataNonIcu.count[i] = {x: stringToDate(rawJson[i].date), y: rawJson[i].total_patients - rawJson[i].total_icu_patients};
                             dataIcu.count[i] = {x: stringToDate(rawJson[i].date), y: rawJson[i].total_icu_patients};
+
                             saveDataForHospCard(rawJson[i]);
                         }
 
@@ -122,25 +123,35 @@ function chartFromPageSource(countyName, url, avgType) {
     readNewConfirmedAndDeathFromSource(url, function(dataCases, dataDeaths) {
         createChart( 
         [
-            { type: 'column', bar_width: 1, color: COLOR.NEW_CASES, name: 'New Cases', points: dataCases.count },
-            { type: 'line spline', line_width: 3, color: COLOR.MA1, name: '7-Day ' + avgType, points: dataCases.getMa1(avgType) },
-            { type: 'line spline', line_width: 3, color: COLOR.MA2, name: '14-Day ' + avgType, points: dataCases.getMa2(avgType) }
+            { type: 'bar', width: 1, color: COLOR.NEW_CASES, name: 'New Cases', 
+                pointsX: dataCases.count.map(p => p.x), pointsY: dataCases.count.map(p => p.y) },
+            { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+                pointsX: dataCases.getMa1(avgType).map(p => p.x), pointsY: dataCases.getMa1(avgType).map(p => p.y) },
+            { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+                pointsX: dataCases.getMa2(avgType).map(p => p.x), pointsY: dataCases.getMa2(avgType).map(p => p.y) }
         ], "chartDiv", countyName + " New Cases by Day", avgType);
     
         createChart( 
         [
-            { type: 'column', bar_width: 1, color: COLOR.DEATH, name: 'New Deaths', points: dataDeaths.count },
-            { type: 'line spline', line_width: 3, color: COLOR.MA1, name: '7-Day ' + avgType, points: dataDeaths.getMa1(avgType) },
-            { type: 'line spline', line_width: 3, color: COLOR.MA2, name: '14-Day ' + avgType, points: dataDeaths.getMa2(avgType) }
+            { type: 'bar', bar_width: 1, color: COLOR.DEATH, name: 'New Deaths', 
+                pointsX: dataDeaths.count.map(p => p.x), pointsY: dataDeaths.count.map(p => p.y) },
+            { type: 'line', line: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+                pointsX: dataDeaths.getMa1(avgType).map(p => p.x), pointsY: dataDeaths.getMa1(avgType).map(p => p.y) },
+            { type: 'line', line: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+                pointsX: dataDeaths.getMa2(avgType).map(p => p.x), pointsY: dataDeaths.getMa2(avgType).map(p => p.y) }
         ], "deathsChartDiv", countyName + " New Deaths by Day", avgType);
 
         readHospitalizationDataFromSource(url, function(dataNonIcu, dataIcu, dataHospComb) {
             createChart( 
             [
-                { type: 'column', bar_width: 1, color: COLOR.HOSP, name: 'Non-ICU', points: dataNonIcu.count },
-                { type: 'column', bar_width: 1, color: COLOR.ICU, name: 'ICU', points: dataIcu.count },
-                { type: 'line spline', line_width: 3, color: COLOR.MA1, name: '7-Day ' + avgType, points: dataHospComb.getMa1(avgType) },
-                { type: 'line spline', line_width: 3, color: COLOR.MA2, name: '14-Day ' + avgType, points: dataHospComb.getMa2(avgType) }
+                { type: 'bar', width: 1, color: COLOR.ICU, name: 'ICU', 
+                    pointsX: dataIcu.count.map(p => p.x), pointsY: dataIcu.count.map(p => p.y) },
+                { type: 'bar', width: 1, color: COLOR.HOSP, name: 'Non-ICU', 
+                    pointsX: dataNonIcu.count.map(p => p.x), pointsY: dataNonIcu.count.map(p => p.y) },
+                { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+                    pointsX: dataHospComb.getMa1(avgType).map(p => p.x), pointsY: dataHospComb.getMa1(avgType).map(p => p.y) },
+                { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+                    pointsX: dataHospComb.getMa2(avgType).map(p => p.x), pointsY: dataHospComb.getMa2(avgType).map(p => p.y) }
             ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day", avgType);
 
             showCasesOrDeathsCard(cardDataCases, "Confirmed Cases", "#casesCard", COLOR.CARD_CASES);

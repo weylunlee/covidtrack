@@ -13,97 +13,117 @@ const COLOR = {
 
 var cache_avgType;
 
+function createTrace(seriesElem) {
+    return {
+        x: seriesElem.pointsX,
+        y: seriesElem.pointsY,
+        name: seriesElem.name,
+        type: seriesElem.type,
+        marker: {
+            color: seriesElem.color,
+            line: {
+              color: seriesElem.color,
+              width: seriesElem.width
+            }
+        }
+    };
+}
+
+function findMax(series) {
+    let max = 0;
+    for (let i=0; i<series.length; i++) {
+        for (let j=0; j<series[i].pointsY.length; j++) {
+            if (series[i].pointsY[j] > max) {
+                max = series[i].pointsY[j];
+            }
+        }
+    }
+
+    return max;
+}
+
 // Create the chart
 function createChart(series, divName, chartName, avgType) {
     cache_avgType = avgType;
 
-    JSC.Chart(divName, {
+    var data = series.map(e => createTrace(e));
+
+    var layout = {
+        barmode: 'stack', 
+        showlegend: true, 
+        legend: { 
+            orientation: 'h', 
+            side: 'top', 
+            x: 0.5, 
+            xanchor: 'center', 
+            y: 1, 
+            traceorder: 'normal',
+        }, 
         title: {
-            position: 'center',
-            label: {
-                text: chartName,
-                style_fontSize: 25
+            text: chartName,
+            font: {
+                size: 24
             }
         },
-        defaultPoint: {
-            marker_visible: false,
-            tooltip: '<span style="width:125px">%seriesName</span> %icon {%yvalue:n0}'
+        xaxis: {
+            showgrid: true,
+            ticks: 'outside',
+            tickformat: '%b %d', dtick: "604800000", tickfont: { size: 10 }
         },
-        yAxis: [{id: 'mainY', formatString: 'n0', scale_type: 'stacked'},
-        {
-            id: 'secondY',
-            scale_syncWith: 'mainY',
-            orientation: 'opposite',
-            line_color: '#e2e2e2',
-            defaultTick: {
-                enabled: false,
-                gridLine_visible: false
-            }
+        yaxis: {
+            range: [0, findMax(series) * 1.05]
+        },
+        margin: {
+            t: 50,
+            r: 0,
+            l: 30
         }
-        ],
-        xAxis: {
-            scale_type: "time",
-            defaultTick_enabled: true,
-            crosshair_enabled: true,
-            formatString: 'MMM<br>d',
-            scale: {
-                interval: {
-                    unit: "day",
-                    multiplier: 7
-                },
-            }
-        },
-        legend: {
-            position: 'inside top',
-            template: '%icon %name'
-        },
-        series: series
-    });
+    };
+      
+    Plotly.newPlot(divName, data, layout, {displayModeBar: false, responsive: true});
 }
 
 // Create the chart for city
 function createCityChart(series, divName, chartName, avgType, total) {
     cache_avgType = avgType;
 
-    JSC.Chart(divName, {
-        annotations: [ 
-            { position: 'top', label_text: '<span style="justify-content: center; font-size: 23px;">' + chartName + '  </span>'},
-            { position: 'top', label_text: '<span style="font-size: 30px; fill: #0b92da; font-family:Arial, Helvetica, sans-serif; font-weight: bold">' + total + '</span> Confirmed Cases' }
-        ], 
-        defaultPoint: {
-            marker_visible: false,
-            tooltip: '<span style="width:125px">%seriesName</span> %icon {%yvalue:n0}'
-        },
-        yAxis: [{id: 'mainY', formatString: 'n0', scale_type: 'stacked'},
-        {
-            id: 'secondY',
-            scale_syncWith: 'mainY',
-            orientation: 'opposite',
-            line_color: '#e2e2e2',
-            defaultTick: {
-                enabled: false,
-                gridLine_visible: false
+    var data = series.map(e => createTrace(e));
+
+    var layout = {
+        barmode: 'stack', 
+        showlegend: true, 
+        legend: { 
+            orientation: 'h', 
+            side: 'top', 
+            x: 0.5, 
+            xanchor: 'center', 
+            y: 1, 
+            traceorder: 'normal',
+        }, 
+        title: {
+            text: chartName 
+                + '<span style="font-size: 22px; fill: #0b92da; font-weight: bold"> ' + total 
+                + '</span><span style="font-size: 12px"> Confirmed Cases</span>',
+            font: {
+                size: 21
             }
+        },
+        xaxis: {
+            showgrid: true,
+            ticks: 'outside',
+            tickformat: '%b %d', dtick: "1209600000", tickfont: { size: 10 }
+        },
+        yaxis: {
+            range: [0, findMax(series) * 1.05]
+        },
+        margin: {
+            t: 34,
+            r: 0,
+            l: 22
         }
-        ],
-        xAxis: {
-            scale_type: "time",
-            defaultTick_enabled: true,
-            crosshair_enabled: true,
-            formatString: 'MMM d',
-            scale: {
-                interval: {
-                    unit: "day",
-                    multiplier: 7
-                },
-            }
-        },
-        legend: {
-            position: 'inside top',
-            template: '%icon %name'
-        },
-        series: series
-    });
+    };
+      
+    Plotly.newPlot(divName, data, layout, {displayModeBar: false, responsive: true});
 }
 
 // Capture image given div name
