@@ -119,7 +119,7 @@ function createCityChart(series, divName, chartName, avgType, total) {
         margin: {
             t: 34,
             r: 0,
-            l: 22
+            l: 23
         }
     };
       
