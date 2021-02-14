@@ -129,7 +129,7 @@ function chartFromPageSource(countyName, url, avgType) {
                 pointsX: dataCases.getMa1(avgType).map(p => p.x), pointsY: dataCases.getMa1(avgType).map(p => p.y) },
             { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
                 pointsX: dataCases.getMa2(avgType).map(p => p.x), pointsY: dataCases.getMa2(avgType).map(p => p.y) }
-        ], "chartDiv", countyName + " New Cases by Day", avgType);
+        ], "chartDiv", countyName + " New Cases by Day", avgType, findMax(dataCases));
     
         createChart( 
         [
@@ -139,7 +139,7 @@ function chartFromPageSource(countyName, url, avgType) {
                 pointsX: dataDeaths.getMa1(avgType).map(p => p.x), pointsY: dataDeaths.getMa1(avgType).map(p => p.y) },
             { type: 'line', line: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
                 pointsX: dataDeaths.getMa2(avgType).map(p => p.x), pointsY: dataDeaths.getMa2(avgType).map(p => p.y) }
-        ], "deathsChartDiv", countyName + " New Deaths by Day", avgType);
+        ], "deathsChartDiv", countyName + " New Deaths by Day", avgType, findMax(dataDeaths));
 
         readHospitalizationDataFromSource(url, function(dataNonIcu, dataIcu, dataHospComb) {
             createChart( 
@@ -152,7 +152,7 @@ function chartFromPageSource(countyName, url, avgType) {
                     pointsX: dataHospComb.getMa1(avgType).map(p => p.x), pointsY: dataHospComb.getMa1(avgType).map(p => p.y) },
                 { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
                     pointsX: dataHospComb.getMa2(avgType).map(p => p.x), pointsY: dataHospComb.getMa2(avgType).map(p => p.y) }
-            ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day", avgType);
+            ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day", avgType, findMax(dataHospComb));
 
             showCasesOrDeathsCard(cardDataCases, "Confirmed Cases", "#casesCard", COLOR.CARD_CASES);
             showHospCard(cardDataNonIcu, cardDataIcu, "In Hospitals", "#hospCard", COLOR.CARD_NONICU, COLOR.CARD_ICU);

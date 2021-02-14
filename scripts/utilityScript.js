@@ -52,3 +52,15 @@ function combineHospitalizations(nonIcu, icu) {
 
     return combined;
 }
+
+function findMax(data) {
+    let max = 0;
+    for (let i=0; i<data.count.length; i++) {
+        if (max < data.count[i].y) {
+            max = data.count[i].y;
+        }
+
+    }
+
+    return max;
+}

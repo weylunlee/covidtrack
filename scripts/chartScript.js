@@ -29,21 +29,8 @@ function createTrace(seriesElem) {
     };
 }
 
-function findMax(series) {
-    let max = 0;
-    for (let i=0; i<series.length; i++) {
-        for (let j=0; j<series[i].pointsY.length; j++) {
-            if (series[i].pointsY[j] > max) {
-                max = series[i].pointsY[j];
-            }
-        }
-    }
-
-    return max;
-}
-
 // Create the chart
-function createChart(series, divName, chartName, avgType) {
+function createChart(series, divName, chartName, avgType, maxY) {
     cache_avgType = avgType;
 
     var data = series.map(e => createTrace(e));
@@ -71,7 +58,7 @@ function createChart(series, divName, chartName, avgType) {
             tickformat: '%b %d', dtick: "604800000", tickfont: { size: 10 }
         },
         yaxis: {
-            range: [0, findMax(series) * 1.05]
+            range: [0, maxY * 1.05]
         },
         margin: {
             t: 50,
@@ -84,7 +71,7 @@ function createChart(series, divName, chartName, avgType) {
 }
 
 // Create the chart for city
-function createCityChart(series, divName, chartName, avgType, total) {
+function createCityChart(series, divName, chartName, avgType, total, maxY) {
     cache_avgType = avgType;
 
     var data = series.map(e => createTrace(e));
@@ -114,7 +101,7 @@ function createCityChart(series, divName, chartName, avgType, total) {
             tickformat: '%b %d', dtick: "1209600000", tickfont: { size: 10 }
         },
         yaxis: {
-            range: [0, findMax(series) * 1.05]
+            range: [0, maxY * 1.05]
         },
         margin: {
             t: 34,

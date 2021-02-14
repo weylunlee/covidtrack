@@ -64,6 +64,6 @@ function createChartForCities(chartDiv, avgType) {
                     pointsX: cityCases.getMa1(avgType).map(p => p.x), pointsY: cityCases.getMa1(avgType).map(p => p.y) },
                 { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
                     pointsX: cityCases.getMa2(avgType).map(p => p.x), pointsY: cityCases.getMa2(avgType).map(p => p.y) }
-            ], chartDiv + cityCases.city, cityCases.city, avgType, formatNumberWithComma(cityCases.total));        
+            ], chartDiv + cityCases.city, cityCases.city, avgType, formatNumberWithComma(cityCases.total), findMax(cityCases));        
     });
 }
