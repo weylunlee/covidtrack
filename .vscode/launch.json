@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "file:///home/kev/Projects/covidtrack/index.html",
+            "url": "file:///data/Projects/covidtrack/index.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

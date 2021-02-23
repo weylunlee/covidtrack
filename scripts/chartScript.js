@@ -25,7 +25,8 @@ function createTrace(seriesElem) {
               color: seriesElem.color,
               width: seriesElem.width
             }
-        }
+        },
+        hovertemplate: "%{y:,.0f}"
     };
 }
 

@@ -25,7 +25,7 @@ function chartForCities(cities, chartDiv, avgType) {
         readChartForCities(function(cummulativeConfirmed) {
             dataList = new Array();
             cities.forEach(city => {
-                let cityCummulative = cummulativeConfirmed.filter(row => row.place == city);
+                let cityCummulative = cummulativeConfirmed.filter(row => row.name == city);
                 let cityCases = new CityData();
                 dataList.push(cityCases);
 
