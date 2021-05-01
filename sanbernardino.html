@@ -15,17 +15,23 @@
 
 <script src="scripts/dataObjectScript.js?v=202102122123"></script>
 <script src="scripts/utilityScript.js?v=202102131654"></script>
-<script src="scripts/dataReaderScript.js?v=202104302240"></script>
-<script src="scripts/chartScript.js?v=202102222109"></script>
+<script src="scripts/dataReaderScript.js?v=202105010027"></script>
+<script src="scripts/chartScript.js?v=202105010027"></script>
 <script>
-    chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", 
-        "San Bernardino", "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", "MA");
+    chartFromPageSource(
+        "San Bernardino County", 
+        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", 
+        "San Bernardino", 
+        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", 
+        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv", 
+        "MA");
 
     function screenShot() {
         let t = getTimestampExt();
         printDiv("#chartDiv", "SB_NewCases", t); 
         setTimeout(() => {printDiv("#hospitalizationChartDiv", "SB_Hosp", t);}, 2000);
         setTimeout(() => {printDiv("#deathsChartDiv", "SB_NewDeaths", t);}, 2000);
+        setTimeout(() => {printDiv("#vaccinationChartDiv", "SB_Vaccinations", t);}, 2000);
     }
 </script>
 </head>
@@ -45,6 +51,7 @@
     <div class="page-container">
         <div>
             <div id="chartDiv" class="chartContent"></div>
+            <div id="vaccinationChartDiv" class="chartContent"></div>
             <div id="hospitalizationChartDiv" class="chartContent"></div>
             <div id="deathsChartDiv" class="chartContent"></div>
 
@@ -55,13 +62,23 @@
             <div class="radio-toolbar">
                 <input type="radio" id="radioMa" name="avgType"
                     value="MA" checked
-                    onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", 
-                        "San Bernardino", "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", "MA")'>
+                    onclick='chartFromPageSource(
+                        "San Bernardino County", 
+                        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", 
+                        "San Bernardino", 
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", 
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv", 
+                        "MA")'>
                 <label for="radioMa">MA</label> 
                 <input type="radio"
                     id="radioEma" name="avgType" value="EMA"
-                    onclick='chartFromPageSource("San Bernardino County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", 
-                        "San Bernardino", "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", "EMA")'>
+                    onclick='chartFromPageSource(
+                        "San Bernardino County", 
+                        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/san-bernardino-county/index.html", 
+                        "San Bernardino", 
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", 
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv", 
+                        "EMA")'>
                 <label for="radioEma">EMA</label>
             </div>
         </div>

@@ -15,6 +15,10 @@ var dataDeaths = new Data();
 var dataNonIcu = new Data();
 var dataIcu = new Data();
 var dataHospComb = new Data();
+var dataPfizer = new Data();
+var dataModerna = new Data();
+var dataJohnson = new Data();
+var dataVacComb = new Data();
 
 let cardDataCases = new CardData();
 let cardDataDeaths = new CardData();
@@ -67,6 +71,56 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
     }
     else {
         callback(dataCases, dataDeaths);
+    }
+}
+
+function readVaccinationDataFromFile(countyTag, gitUrl, callback) {
+    // Check if cached
+    if (dataPfizer.count == null) {
+        console.log("reading from vac git" + gitUrl);
+
+        let rawJson = [];
+        $.ajax({
+            url: gitUrl,
+            type: 'GET',
+            success: function (data) {
+                // convert to Json
+                rawJson = JSC.csv2Json(data);
+
+                // Filter days before 4/1/2020
+                rawJson = rawJson.filter(row => row.county == countyTag);
+
+                dataPfizer.count = new Array(rawJson.length);
+                dataModerna.count = new Array(rawJson.length);
+                dataJohnson.count = new Array(rawJson.length);
+
+                for (let i=0; i<rawJson.length; i++) {
+                    dataPfizer.count[i] = {x: milliesToDate(rawJson[i].date), y: rawJson[i].pfizer_doses};
+                    dataModerna.count[i] = {x: milliesToDate(rawJson[i].date), y: rawJson[i].moderna_doses};
+                    dataJohnson.count[i] = {x: milliesToDate(rawJson[i].date), y: rawJson[i].jj_doses};
+                }
+
+                // // Calc moving averages on the total hosp count
+                dataVacComb.count = combineHospitalizations(dataPfizer.count, dataModerna.count);
+                dataVacComb.count = combineHospitalizations(dataVacComb.count, dataJohnson.count);
+                // dataHospComb.calcMovingAverages();
+
+                // Add min date so that all charts have same time scale
+                dataPfizer.padDatePrior(DATE.MIN);
+                dataModerna.padDatePrior(DATE.MIN);
+                dataJohnson.padDatePrior(DATE.MIN);
+
+                // Check if also need to add max date in case lagging from other charts
+                dataPfizer.padDateAfter(dateMax);
+                dataModerna.padDateAfter(dateMax);
+                dataJohnson.padDateAfter(dateMax);
+
+                callback(dataPfizer, dataModerna, dataJohnson, dataVacComb);
+            }
+        });
+    }
+    else {
+        callback(dataPfizer, dataModerna, dataJohnson, dataVacComb);
     }
 }
 
@@ -168,7 +222,7 @@ function readHospitalizationDataFromSource(url, callback) {
     }
 }
 
-function chartFromPageSource(countyName, pageUrl, countyTag, gitUrl, avgType) {
+function chartFromPageSource(countyName, pageUrl, countyTag, hospUrl, vacUrl, avgType) {
     readNewConfirmedAndDeathFromSource(pageUrl, function(dataCases, dataDeaths) {
         createChart( 
         [
@@ -190,7 +244,7 @@ function chartFromPageSource(countyName, pageUrl, countyTag, gitUrl, avgType) {
                 pointsX: dataDeaths.getMa2(avgType).map(p => p.x), pointsY: dataDeaths.getMa2(avgType).map(p => p.y) }
         ], "deathsChartDiv", countyName + " New Deaths by Day", avgType, findMax(dataDeaths));
 
-        readHospitilizationDataFromFile(countyTag, gitUrl, function(dataNonIcu, dataIcu, dataHospComb) {
+        readHospitilizationDataFromFile(countyTag, hospUrl, function(dataNonIcu, dataIcu, dataHospComb) {
             createChart( 
             [
                 { type: 'bar', width: 1, color: COLOR.ICU, name: 'ICU', 
@@ -206,6 +260,18 @@ function chartFromPageSource(countyName, pageUrl, countyTag, gitUrl, avgType) {
             showCasesOrDeathsCard(cardDataCases, "Confirmed Cases", "#casesCard", COLOR.CARD_CASES);
             showHospCard(cardDataNonIcu, cardDataIcu, "In Hospitals", "#hospCard", COLOR.CARD_NONICU, COLOR.CARD_ICU);
             showCasesOrDeathsCard(cardDataDeaths, "Deaths", "#deathsCard", COLOR.CARD_DEATHS);
+
+            readVaccinationDataFromFile(countyTag, vacUrl, function(dataPfizer, dataModerna, dataJohnson, dataVacComb) {
+                createChart(
+                [
+                    { type: 'bar', width: 1, color: COLOR.PFIZER, name: 'Pfizer', 
+                        pointsX: dataPfizer.count.map(p => p.x), pointsY: dataPfizer.count.map(p => p.y) },
+                    { type: 'bar', width: 1, color: COLOR.MODERNA, name: 'Moderna', 
+                        pointsX: dataModerna.count.map(p => p.x), pointsY: dataModerna.count.map(p => p.y) },
+                    { type: 'bar', width: 1, color: COLOR.JOHNSON, name: 'Johnson & Johnson', 
+                    pointsX: dataJohnson.count.map(p => p.x), pointsY: dataJohnson.count.map(p => p.y) },
+                ], "vaccinationChartDiv", countyName + " Vaccinations (Doses Administered Cummulative)", avgType, findMax(dataVacComb));
+            });
         });
     });
 }
