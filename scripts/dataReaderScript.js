@@ -70,6 +70,55 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
     }
 }
 
+function readHospitilizationDataFromFile(countyTag, gitUrl, callback) {
+    // Check if cached
+    if (dataNonIcu.count == null) {
+        console.log("reading from hosp git" + gitUrl);
+
+        let rawJson = [];
+        $.ajax({
+            url: gitUrl,
+            type: 'GET',
+            success: function (data) {
+                // convert to Json
+                rawJson = JSC.csv2Json(data);
+
+                // Filter days before 4/1/2020
+                rawJson = rawJson.filter(row => DATE.MIN_HOSP <= milliesToDate(row.date) && row.county == countyTag);
+
+                dataNonIcu.count = new Array(rawJson.length);
+                dataIcu.count = new Array(rawJson.length);
+
+                for (let i=0; i<rawJson.length; i++) {
+                    dataNonIcu.count[i] = {x: milliesToDate(rawJson[i].date), 
+                        y: (rawJson[i].positive_patients + rawJson[i].suspected_patients) - (rawJson[i].icu_positive_patients + rawJson[i].icu_suspected_patients)};
+                    dataIcu.count[i] = {x: milliesToDate(rawJson[i].date), 
+                        y: rawJson[i].icu_positive_patients + rawJson[i].icu_suspected_patients};
+
+                    saveDataForHospCard(rawJson[i]);
+                }
+
+                // Calc moving averages on the total hosp count
+                dataHospComb.count = combineHospitalizations(dataNonIcu.count, dataIcu.count);
+                dataHospComb.calcMovingAverages();
+
+                // Add min date so that all charts have same time scale
+                dataNonIcu.padDatePrior(DATE.MIN);
+                dataIcu.padDatePrior(DATE.MIN);
+
+                // Check if also need to add max date in case lagging from other charts
+                dataNonIcu.padDateAfter(dateMax);
+                dataIcu.padDateAfter(dateMax);
+
+                callback(dataNonIcu, dataIcu, dataHospComb);
+            }
+        });
+    }
+    else {
+        callback(dataNonIcu, dataIcu, dataHospComb);
+    }
+}
+
 function readHospitalizationDataFromSource(url, callback) {
     // Check if cached
     if (dataNonIcu.count == null) {
@@ -119,8 +168,8 @@ function readHospitalizationDataFromSource(url, callback) {
     }
 }
 
-function chartFromPageSource(countyName, url, avgType) {
-    readNewConfirmedAndDeathFromSource(url, function(dataCases, dataDeaths) {
+function chartFromPageSource(countyName, pageUrl, countyTag, gitUrl, avgType) {
+    readNewConfirmedAndDeathFromSource(pageUrl, function(dataCases, dataDeaths) {
         createChart( 
         [
             { type: 'bar', width: 1, color: COLOR.NEW_CASES, name: 'New Cases', 
@@ -141,7 +190,7 @@ function chartFromPageSource(countyName, url, avgType) {
                 pointsX: dataDeaths.getMa2(avgType).map(p => p.x), pointsY: dataDeaths.getMa2(avgType).map(p => p.y) }
         ], "deathsChartDiv", countyName + " New Deaths by Day", avgType, findMax(dataDeaths));
 
-        readHospitalizationDataFromSource(url, function(dataNonIcu, dataIcu, dataHospComb) {
+        readHospitilizationDataFromFile(countyTag, gitUrl, function(dataNonIcu, dataIcu, dataHospComb) {
             createChart( 
             [
                 { type: 'bar', width: 1, color: COLOR.ICU, name: 'ICU', 
@@ -190,12 +239,12 @@ function saveDataForCasesAndDeathsCards(row) {
 }
 
 function saveDataForHospCard(row) {
-    let date = stringToDate(row.date);
+    let date = milliesToDate(row.date);
     
     // Use latest date for the main numbers
     if (cardDataNonIcu.date == null || cardDataNonIcu.date.getTime() < date.getTime()) {
-        cardDataNonIcu.totalCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.totalCount = row.total_icu_patients;
+        cardDataNonIcu.totalCount = row.positive_patients + row.suspected_patients - (row.icu_positive_patients + row.icu_suspected_patients);
+        cardDataIcu.totalCount = row.icu_positive_patients + row.icu_suspected_patients;
         
         cardDataNonIcu.date = date;
         cardDataIcu.date = date;
@@ -203,16 +252,16 @@ function saveDataForHospCard(row) {
 
     // Assume we are processing in date ascending order
     if (dateEqual(dateBefore, date)) {
-        cardDataNonIcu.beforeCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.beforeCount = row.total_icu_patients;
+        cardDataNonIcu.beforeCount = row.positive_patients + row.suspected_patients - (row.icu_positive_patients + row.icu_suspected_patients);
+        cardDataIcu.beforeCount = row.icu_positive_patients + row.icu_suspected_patients;
     }
     else if (dateEqual(dateYest, date)) {
-        cardDataNonIcu.yestCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.yestCount = row.total_icu_patients;
+        cardDataNonIcu.yestCount = row.positive_patients + row.suspected_patients - (row.icu_positive_patients + row.icu_suspected_patients);
+        cardDataIcu.yestCount = row.icu_positive_patients + row.icu_suspected_patients;
     }
     else if (dateEqual(dateToday, date)) {
-        cardDataNonIcu.todayCount = row.total_patients - row.total_icu_patients;
-        cardDataIcu.todayCount = row.total_icu_patients;
+        cardDataNonIcu.todayCount = row.positive_patients + row.suspected_patients - (row.icu_positive_patients + row.icu_suspected_patients);
+        cardDataIcu.todayCount = row.icu_positive_patients + row.icu_suspected_patients;
     }
 }
 

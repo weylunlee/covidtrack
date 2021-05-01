@@ -11,13 +11,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="scripts/dom-to-image.min.js"></script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
 <script src="scripts/dataObjectScript.js?v=202102122123"></script>
 <script src="scripts/utilityScript.js?v=202102131654"></script>
-<script src="scripts/dataReaderScript.js?v=202102131654"></script>
+<script src="scripts/dataReaderScript.js?v=202104302240"></script>
 <script src="scripts/chartScript.js?v=202102222109"></script>
 <script>
-    chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", "MA");
+    chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", 
+        "Los Angeles", "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", "MA");
 
     function screenShot() {
         let t = getTimestampExt();
@@ -54,11 +56,13 @@
             <div class="radio-toolbar">
                 <input type="radio" id="radioMa" name="avgType"
                     value="MA" checked
-                    onclick='chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", "MA");'>
+                    onclick='chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", 
+                        "Los Angeles", "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", "MA");'>
                 <label for="radioMa">MA</label> 
                 <input type="radio"
                     id="radioEma" name="avgType" value="EMA"
-                    onclick='chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", "EMA");'>
+                    onclick='chartFromPageSource("LA County", "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", 
+                        "Los Angeles", "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", "EMA");'>
                 <label for="radioEma">EMA</label>
             </div>
         </div>
