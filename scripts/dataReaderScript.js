@@ -48,7 +48,7 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                             let date = stringToDate(rawJson[i].date);
 
                             dataCases.count[i] = {x: date, y: rawJson[i].new_confirmed_cases};
-                            dataDeaths.count[i] = {x: date, y: rawJson[i].new_deaths};
+                            dataDeaths.count[i] = {x: date, y: rawJson[i].new_confirmed_deaths};
 
                             // save max date so that can push into hosp if necessary
                             if (dateMax == null || dateMax < date) {
@@ -283,8 +283,8 @@ function saveDataForCasesAndDeathsCards(row) {
         cardDataCases.totalCount = row.confirmed_cases;
     }
 
-    if (cardDataDeaths.totalCount == null || cardDataDeaths.totalCount < row.deaths) {
-        cardDataDeaths.totalCount = row.deaths;
+    if (cardDataDeaths.totalCount == null || cardDataDeaths.totalCount < row.confirmed_deaths) {
+        cardDataDeaths.totalCount = row.confirmed_deaths;
     }
 
     let date = stringToDate(row.date);
@@ -292,15 +292,15 @@ function saveDataForCasesAndDeathsCards(row) {
     // save data for days
     if (dateEqual(dateBefore, date)) {
         cardDataCases.beforeCount = row.new_confirmed_cases;
-        cardDataDeaths.beforeCount = row.new_deaths;
+        cardDataDeaths.beforeCount = row.new_confirmed_deaths;
     }
     else if (dateEqual(dateYest, date)) {
         cardDataCases.yestCount = row.new_confirmed_cases;
-        cardDataDeaths.yestCount = row.new_deaths;
+        cardDataDeaths.yestCount = row.new_confirmed_deaths;
     }
     else if (dateEqual(dateToday, date)) {
         cardDataCases.todayCount = row.new_confirmed_cases;
-        cardDataDeaths.todayCount = row.new_deaths;
+        cardDataDeaths.todayCount = row.new_confirmed_deaths;
     }
 }
 
