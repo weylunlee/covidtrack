@@ -6,7 +6,7 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=202102122123">
+<link rel="stylesheet" href="styles/indexStyle.css?v=202201092102">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="scripts/dom-to-image.min.js"></script>
@@ -19,22 +19,22 @@
 <script src="scripts/chartScript.js?v=202105010027"></script>
 <script>
     chartFromPageSource(
-        "LA County", 
-        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", 
-        "Los Angeles", 
-        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", 
-        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv", 
+        "LA County",
+        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
+        "Los Angeles",
+        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv",
+        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv",
         "MA");
 
     function screenShot() {
         let t = getTimestampExt();
-        printDiv("#chartDiv", "LA_NewCases", t); 
+        printDiv("#chartDiv", "LA_NewCases", t);
         setTimeout(() => {printDiv("#hospitalizationChartDiv", "LA_Hosp", t);}, 2000);
         setTimeout(() => {printDiv("#deathsChartDiv", "LA_NewDeaths", t);}, 2000);
         setTimeout(() => {printDiv("#vaccinationChartDiv", "LA_Vaccinations", t);}, 2000);
     }
 
-</script> 
+</script>
 </head>
 <body>
     <div>
@@ -48,7 +48,7 @@
         <div id="hospCard" class="card"></div>
         <div id="deathsCard" class="card"></div>
     </div>
-    
+
     <div class="page-container">
         <div>
             <div id="chartDiv" class="chartContent"></div>
@@ -64,21 +64,21 @@
                 <input type="radio" id="radioMa" name="avgType"
                     value="MA" checked
                     onclick='chartFromPageSource(
-                        "LA County", 
-                        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", 
-                        "Los Angeles", 
-                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", 
-                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv", 
+                        "LA County",
+                        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
+                        "Los Angeles",
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv",
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv",
                         "MA");'>
-                <label for="radioMa">MA</label> 
+                <label for="radioMa">MA</label>
                 <input type="radio"
                     id="radioEma" name="avgType" value="EMA"
                     onclick='chartFromPageSource(
-                        "LA County", 
-                        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html", 
-                        "Los Angeles", 
-                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv", 
-                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv", 
+                        "LA County",
+                        "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
+                        "Los Angeles",
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv",
+                        "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-vaccination-county-totals.csv",
                         "EMA");'>
                 <label for="radioEma">EMA</label>
             </div>

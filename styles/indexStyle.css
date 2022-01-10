@@ -49,6 +49,7 @@
 .page-container {
     display: flex;
     min-height: 100vh;
+    min-width: 100%;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -121,10 +122,12 @@
 @media only screen and (min-width: 1440px) {
     .chartContent {
         height: 48vw;
+        max-height: 90vh;
         width: 100%;
     }
 
     .page-container {
-        padding: 0 0 0 0;
+        max-width: 100% !important
+        padding: 0 0 0 0 !important
     }
 }
