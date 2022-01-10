@@ -27,7 +27,7 @@
 .card-big-num {
     font-size: 5em;
 }
-  
+
 /* Remove extra left and right margins, due to padding */
 .card-container {
     padding: 0 0 50px 0;
@@ -101,7 +101,7 @@
         margin: 0px;
     }
 
-    .card-container { 
+    .card-container {
         grid-template-columns: 230px 350px 230px;
     }
 
@@ -115,15 +115,5 @@
 
     .card {
         font-size: .9em;
-    }
-}
-
-@media only screen and (min-width: 1440px) {
-    .chartContent {
-        height: 48vw;
-    }
-
-    .page-container {
-        padding: 0 calc(100% * .15) 0 calc(100% * .15);
     }
 }
