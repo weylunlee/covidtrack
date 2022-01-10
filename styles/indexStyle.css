@@ -39,11 +39,12 @@
 }
 
 .chartContent {
-    width: 100%;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
     height: 70vw;
     margin: 0 auto;
     padding: 0 0 50px 0;
-    flex-direction: row;
 }
 
 .page-container {
@@ -52,9 +53,7 @@
     max-width: 100% !important;
     min-height: 100vh;
     padding: 0 0 0 0 !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
 }
 
 .footer {
@@ -126,6 +125,5 @@
     .chartContent {
         height: 48vw;
         max-height: 90vh;
-        width: 100%;
     }
 }
