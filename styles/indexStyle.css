@@ -117,3 +117,14 @@
         font-size: .9em;
     }
 }
+
+@media only screen and (min-width: 1440px) {
+    .chartContent {
+        height: 48vw;
+        width: 100%;
+    }
+
+    .page-container {
+        padding: 0 0 0 0;
+    }
+}
