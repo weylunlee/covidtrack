@@ -40,20 +40,18 @@
 
 .chartContent {
     width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
     height: 70vw;
     margin: 0 auto;
     padding: 0 0 50px 0;
 }
 
 .page-container {
-    width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
+    width: 99.225vw !important;
+    position: relative;
+    margin-left: -49.59vw;
+    left: 50%;
     min-height: 100vh;
     padding: 0 0 0 0 !important;
-
 }
 
 .footer {
