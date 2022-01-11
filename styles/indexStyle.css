@@ -39,14 +39,14 @@
 }
 
 .chartContent {
-    width: 100% !important;
+    width: 99vw !important;
     height: 70vw;
     margin: 0 auto;
     padding: 0 0 50px 0;
 }
 
 .page-container {
-    width: 99.225vw !important;
+    width: 99vw !important;
     position: relative;
     margin-left: -49.59vw;
     left: 50%;

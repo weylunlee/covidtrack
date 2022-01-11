@@ -40,16 +40,16 @@ function createChart(series, divName, chartName, avgType, maxY) {
     var data = series.map(e => createTrace(e));
 
     var layout = {
-        barmode: 'stack', 
-        showlegend: true, 
-        legend: { 
-            orientation: 'h', 
-            side: 'top', 
-            x: 0.5, 
-            xanchor: 'center', 
-            y: 1, 
+        barmode: 'stack',
+        showlegend: true,
+        legend: {
+            orientation: 'h',
+            side: 'top',
+            x: 0.5,
+            xanchor: 'center',
+            y: 1,
             traceorder: 'normal',
-        }, 
+        },
         title: {
             text: chartName,
             font: {
@@ -59,7 +59,7 @@ function createChart(series, divName, chartName, avgType, maxY) {
         xaxis: {
             showgrid: true,
             ticks: 'outside',
-            tickformat: '%b %d', dtick: "604800000", tickfont: { size: 10 }
+            tickformat: '%b %d', dtick: "1209600000", tickfont: { size: 10 }
         },
         yaxis: {
             range: [0, maxY * 1.05]
@@ -70,7 +70,7 @@ function createChart(series, divName, chartName, avgType, maxY) {
             l: 31
         }
     };
-      
+
     Plotly.newPlot(divName, data, layout, {displayModeBar: false, responsive: true});
 }
 
@@ -81,19 +81,19 @@ function createCityChart(series, divName, chartName, avgType, total, maxY) {
     var data = series.map(e => createTrace(e));
 
     var layout = {
-        barmode: 'stack', 
-        showlegend: true, 
-        legend: { 
-            orientation: 'h', 
-            side: 'top', 
-            x: 0.5, 
-            xanchor: 'center', 
-            y: 1, 
+        barmode: 'stack',
+        showlegend: true,
+        legend: {
+            orientation: 'h',
+            side: 'top',
+            x: 0.5,
+            xanchor: 'center',
+            y: 1,
             traceorder: 'normal',
-        }, 
+        },
         title: {
-            text: chartName 
-                + '<span style="font-size: 22px; fill: #0b92da; font-weight: bold"> ' + total 
+            text: chartName
+                + '<span style="font-size: 22px; fill: #0b92da; font-weight: bold"> ' + total
                 + '</span><span style="font-size: 12px"> Confirmed Cases</span>',
             font: {
                 size: 21
@@ -113,7 +113,7 @@ function createCityChart(series, divName, chartName, avgType, total, maxY) {
             l: 23
         }
     };
-      
+
     Plotly.newPlot(divName, data, layout, {displayModeBar: false, responsive: true});
 }
 
@@ -136,7 +136,7 @@ function downloadURI(uri, name) {
     link.download = name;
     link.href = uri;
     document.body.appendChild(link);
-    link.click();  
+    link.click();
 }
 
 // Get a timestamp string based on now
@@ -162,15 +162,15 @@ function render(template, node) {
 
 function formatPlus(number, color) {
     return number == null ? "Not yet avail" :
-        "<span style='color:" + color + "'><b>+" 
-        + formatNumberWithComma(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) 
+        "<span style='color:" + color + "'><b>+"
+        + formatNumberWithComma(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
         + "</b></span>";
 }
 
 function format(number, color) {
     return number == null ? "Not yet avail" :
-        "<span style='color:" + color + "'><b>" 
-        + formatNumberWithComma(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) 
+        "<span style='color:" + color + "'><b>"
+        + formatNumberWithComma(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
         + "</b></span>";
 }
 
