@@ -48,8 +48,6 @@
 .page-container {
     width: 99vw !important;
     position: relative;
-    margin-left: -49.59vw;
-    left: 50%;
     min-height: 100vh;
     padding: 0 0 0 0 !important;
 }
