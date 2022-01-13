@@ -38,11 +38,18 @@
     justify-content: center;
 }
 
+.chart-title {
+    font-size: 1.5em;
+    font-family: sans-serif;
+    text-align: center;
+    padding: 30px 0 0 0;
+}
+
 .chartContent {
     width: 99vw !important;
     height: 70vw;
     margin: 0 auto;
-    padding: 0 0 50px 0;
+    padding: 0 0 0 0;
 }
 
 .page-container {

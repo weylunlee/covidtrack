@@ -64,7 +64,7 @@ function readNewConfirmedAndDeathFromSource(url, callback) {
                 dataCases.truncateDatesPrior(DATE.MIN);
                 dataDeaths.calcMovingAverages();
                 dataDeaths.truncateDatesPrior(DATE.MIN);
-                
+
                 callback(dataCases, dataDeaths);
             }
         });
@@ -144,9 +144,9 @@ function readHospitilizationDataFromFile(countyTag, gitUrl, callback) {
                 dataIcu.count = new Array(rawJson.length);
 
                 for (let i=0; i<rawJson.length; i++) {
-                    dataNonIcu.count[i] = {x: milliesToDate(rawJson[i].date), 
+                    dataNonIcu.count[i] = {x: milliesToDate(rawJson[i].date),
                         y: (rawJson[i].positive_patients + rawJson[i].suspected_patients) - (rawJson[i].icu_positive_patients + rawJson[i].icu_suspected_patients)};
-                    dataIcu.count[i] = {x: milliesToDate(rawJson[i].date), 
+                    dataIcu.count[i] = {x: milliesToDate(rawJson[i].date),
                         y: rawJson[i].icu_positive_patients + rawJson[i].icu_suspected_patients};
 
                     saveDataForHospCard(rawJson[i]);
@@ -222,40 +222,40 @@ function readHospitalizationDataFromSource(url, callback) {
     }
 }
 
-function chartFromPageSource(countyName, pageUrl, countyTag, hospUrl, vacUrl, avgType) {
+function chartFromPageSource(pageUrl, countyTag, hospUrl, vacUrl, avgType) {
     readNewConfirmedAndDeathFromSource(pageUrl, function(dataCases, dataDeaths) {
-        createChart( 
+        createChart(
         [
-            { type: 'bar', width: 1, color: COLOR.NEW_CASES, name: 'New Cases', 
+            { type: 'bar', width: 1, color: COLOR.NEW_CASES, name: 'New Cases',
                 pointsX: dataCases.count.map(p => p.x), pointsY: dataCases.count.map(p => p.y) },
-            { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+            { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType,
                 pointsX: dataCases.getMa1(avgType).map(p => p.x), pointsY: dataCases.getMa1(avgType).map(p => p.y) },
-            { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+            { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType,
                 pointsX: dataCases.getMa2(avgType).map(p => p.x), pointsY: dataCases.getMa2(avgType).map(p => p.y) }
-        ], "chartDiv", countyName + " New Cases by Day", avgType, findMax(dataCases));
-    
-        createChart( 
+        ], "chartDiv", avgType, findMax(dataCases));
+
+        createChart(
         [
-            { type: 'bar', bar_width: 1, color: COLOR.DEATH, name: 'New Deaths', 
+            { type: 'bar', bar_width: 1, color: COLOR.DEATH, name: 'New Deaths',
                 pointsX: dataDeaths.count.map(p => p.x), pointsY: dataDeaths.count.map(p => p.y) },
-            { type: 'line', line: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+            { type: 'line', line: 2, color: COLOR.MA1, name: '7-Day ' + avgType,
                 pointsX: dataDeaths.getMa1(avgType).map(p => p.x), pointsY: dataDeaths.getMa1(avgType).map(p => p.y) },
-            { type: 'line', line: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+            { type: 'line', line: 2, color: COLOR.MA2, name: '14-Day ' + avgType,
                 pointsX: dataDeaths.getMa2(avgType).map(p => p.x), pointsY: dataDeaths.getMa2(avgType).map(p => p.y) }
-        ], "deathsChartDiv", countyName + " New Deaths by Day", avgType, findMax(dataDeaths));
+        ], "deathsChartDiv", avgType, findMax(dataDeaths));
 
         readHospitilizationDataFromFile(countyTag, hospUrl, function(dataNonIcu, dataIcu, dataHospComb) {
-            createChart( 
+            createChart(
             [
-                { type: 'bar', width: 1, color: COLOR.ICU, name: 'ICU', 
+                { type: 'bar', width: 1, color: COLOR.ICU, name: 'ICU',
                     pointsX: dataIcu.count.map(p => p.x), pointsY: dataIcu.count.map(p => p.y) },
-                { type: 'bar', width: 1, color: COLOR.HOSP, name: 'Non-ICU', 
+                { type: 'bar', width: 1, color: COLOR.HOSP, name: 'Non-ICU',
                     pointsX: dataNonIcu.count.map(p => p.x), pointsY: dataNonIcu.count.map(p => p.y) },
-                { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType, 
+                { type: 'line', width: 2, color: COLOR.MA1, name: '7-Day ' + avgType,
                     pointsX: dataHospComb.getMa1(avgType).map(p => p.x), pointsY: dataHospComb.getMa1(avgType).map(p => p.y) },
-                { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType, 
+                { type: 'line', width: 2, color: COLOR.MA2, name: '14-Day ' + avgType,
                     pointsX: dataHospComb.getMa2(avgType).map(p => p.x), pointsY: dataHospComb.getMa2(avgType).map(p => p.y) }
-            ], "hospitalizationChartDiv", countyName + " Hospitalizations (Confirmed + Suspected) by Day", avgType, findMax(dataHospComb));
+            ], "hospitalizationChartDiv", avgType, findMax(dataHospComb));
 
             showCasesOrDeathsCard(cardDataCases, "Confirmed Cases", "#casesCard", COLOR.CARD_CASES);
             showHospCard(cardDataNonIcu, cardDataIcu, "In Hospitals", "#hospCard", COLOR.CARD_NONICU, COLOR.CARD_ICU);
@@ -264,13 +264,13 @@ function chartFromPageSource(countyName, pageUrl, countyTag, hospUrl, vacUrl, av
             readVaccinationDataFromFile(countyTag, vacUrl, function(dataPfizer, dataModerna, dataJohnson, dataVacComb) {
                 createChart(
                 [
-                    { type: 'bar', width: 1, color: COLOR.PFIZER, name: 'Pfizer', 
+                    { type: 'bar', width: 1, color: COLOR.PFIZER, name: 'Pfizer',
                         pointsX: dataPfizer.count.map(p => p.x), pointsY: dataPfizer.count.map(p => p.y) },
-                    { type: 'bar', width: 1, color: COLOR.MODERNA, name: 'Moderna', 
+                    { type: 'bar', width: 1, color: COLOR.MODERNA, name: 'Moderna',
                         pointsX: dataModerna.count.map(p => p.x), pointsY: dataModerna.count.map(p => p.y) },
-                    { type: 'bar', width: 1, color: COLOR.JOHNSON, name: 'Johnson & Johnson', 
+                    { type: 'bar', width: 1, color: COLOR.JOHNSON, name: 'Johnson & Johnson',
                     pointsX: dataJohnson.count.map(p => p.x), pointsY: dataJohnson.count.map(p => p.y) },
-                ], "vaccinationChartDiv", countyName + " Vaccinations (Doses Administered Cummulative)", avgType, findMax(dataVacComb));
+                ], "vaccinationChartDiv", avgType, findMax(dataVacComb));
             });
         });
     });
@@ -306,12 +306,12 @@ function saveDataForCasesAndDeathsCards(row) {
 
 function saveDataForHospCard(row) {
     let date = milliesToDate(row.date);
-    
+
     // Use latest date for the main numbers
     if (cardDataNonIcu.date == null || cardDataNonIcu.date.getTime() < date.getTime()) {
         cardDataNonIcu.totalCount = row.positive_patients + row.suspected_patients - (row.icu_positive_patients + row.icu_suspected_patients);
         cardDataIcu.totalCount = row.icu_positive_patients + row.icu_suspected_patients;
-        
+
         cardDataNonIcu.date = date;
         cardDataIcu.date = date;
     }
@@ -332,24 +332,24 @@ function saveDataForHospCard(row) {
 }
 
 function showCasesOrDeathsCard(cardData, label, cardDiv, color) {
-    render("<span class='card-big-num'>" + format(cardData.totalCount, color) + "</span><br><span class='card-label'>" + label + "</span><br><br>" 
+    render("<span class='card-big-num'>" + format(cardData.totalCount, color) + "</span><br><span class='card-label'>" + label + "</span><br><br>"
         + formatPlus(cardData.todayCount, color) + " Today<br>"
         + formatPlus(cardData.yestCount, color) + " " + DAY_OF_WEEK[dateYest.getDay()] +"<br>"
-        + formatPlus(cardData.beforeCount, color) + " " + DAY_OF_WEEK[dateBefore.getDay()], 
+        + formatPlus(cardData.beforeCount, color) + " " + DAY_OF_WEEK[dateBefore.getDay()],
         cardDiv);
 }
- 
+
 function showHospCard(cardDataNonIcu, cardDataIcu, label, cardDiv, nonIcuColor, icuColor) {
-    render("<span class='card-big-num'>" + format(cardDataNonIcu.totalCount, nonIcuColor) 
-        + "</span> Non-ICU / <span class='card-big-num'>" + format(cardDataIcu.totalCount, icuColor) + "</span> ICU <br><span class='card-label'>" + label + "</span><br><br>" 
+    render("<span class='card-big-num'>" + format(cardDataNonIcu.totalCount, nonIcuColor)
+        + "</span> Non-ICU / <span class='card-big-num'>" + format(cardDataIcu.totalCount, icuColor) + "</span> ICU <br><span class='card-label'>" + label + "</span><br><br>"
         + constructHospCardDayString(cardDataNonIcu.todayCount, cardDataIcu.todayCount, nonIcuColor, icuColor) + " Today<br>"
         + constructHospCardDayString(cardDataNonIcu.yestCount, cardDataIcu.yestCount, nonIcuColor, icuColor) + " " +DAY_OF_WEEK[dateYest.getDay()] +"<br>"
-        + constructHospCardDayString(cardDataNonIcu.beforeCount, cardDataIcu.beforeCount, nonIcuColor, icuColor) + " " + DAY_OF_WEEK[dateBefore.getDay()], 
+        + constructHospCardDayString(cardDataNonIcu.beforeCount, cardDataIcu.beforeCount, nonIcuColor, icuColor) + " " + DAY_OF_WEEK[dateBefore.getDay()],
         cardDiv);
-} 
+}
 
 function constructHospCardDayString(nonIcuCount, icuCount, nonIcuColor, icuColor) {
-    return nonIcuCount == null || icuCount == null 
-        ? format(nonIcuCount, nonIcuColor) 
-        : format(nonIcuCount, nonIcuColor) + " Non-ICU / " + format(icuCount, icuColor) + " ICU"; 
+    return nonIcuCount == null || icuCount == null
+        ? format(nonIcuCount, nonIcuColor)
+        : format(nonIcuCount, nonIcuColor) + " Non-ICU / " + format(icuCount, icuColor) + " ICU";
 }

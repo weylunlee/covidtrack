@@ -34,7 +34,7 @@ function createTrace(seriesElem) {
 }
 
 // Create the chart
-function createChart(series, divName, chartName, avgType, maxY) {
+function createChart(series, divName, avgType, maxY) {
     cache_avgType = avgType;
 
     var data = series.map(e => createTrace(e));
@@ -49,12 +49,6 @@ function createChart(series, divName, chartName, avgType, maxY) {
             xanchor: 'center',
             y: 1,
             traceorder: 'normal',
-        },
-        title: {
-            text: chartName,
-            font: {
-                size: 24
-            }
         },
         xaxis: {
             showgrid: true,

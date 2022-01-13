@@ -6,20 +6,19 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=202201102021">
+<link rel="stylesheet" href="styles/indexStyle.css?v=202201122058">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="scripts/dom-to-image.min.js"></script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/dataObjectScript.js?v=202102122123"></script>
-<script src="scripts/utilityScript.js?v=202102131654"></script>
-<script src="scripts/dataReaderScript.js?v=202109181304"></script>
-<script src="scripts/chartScript.js?v=202201102021"></script>
+<script src="scripts/dataObjectScript.js?v=202201122058"></script>
+<script src="scripts/utilityScript.js?v=202201122058"></script>
+<script src="scripts/dataReaderScript.js?v=202201122058"></script>
+<script src="scripts/chartScript.js?v=202201122058"></script>
 <script>
     chartFromPageSource(
-        "LA County",
         "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
         "Los Angeles",
         "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv",
@@ -49,11 +48,15 @@
         <div id="deathsCard" class="card"></div>
     </div>
 
-    <div class="page-container">
+    <!-- <div class="page-container"> -->
         <div>
+            <div class="chart-title">LA County New Cases by Day</div>
             <div id="chartDiv" class="chartContent"></div>
+            <div class="chart-title">LA County Vaccinations (Doses Adminstered Cummulative)</div>
             <div id="vaccinationChartDiv" class="chartContent"></div>
+            <div class="chart-title">LA County Hospitalizations (Confirmed + Suspected) by Day</div>
             <div id="hospitalizationChartDiv" class="chartContent"></div>
+            <div class="chart-title">LA County New Deaths by Day</div>
             <div id="deathsChartDiv" class="chartContent"></div>
 
             Raw data from <a href="https://github.com/datadesk/california-coronavirus-data/blob/master/README.md">LA Times</a>
@@ -64,7 +67,6 @@
                 <input type="radio" id="radioMa" name="avgType"
                     value="MA" checked
                     onclick='chartFromPageSource(
-                        "LA County",
                         "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
                         "Los Angeles",
                         "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv",
@@ -74,7 +76,6 @@
                 <input type="radio"
                     id="radioEma" name="avgType" value="EMA"
                     onclick='chartFromPageSource(
-                        "LA County",
                         "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
                         "Los Angeles",
                         "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-hospital-patient-county-totals.csv",
@@ -83,6 +84,6 @@
                 <label for="radioEma">EMA</label>
             </div>
         </div>
-    </div>
+    <!-- </div> -->
 </body>
 </html>
