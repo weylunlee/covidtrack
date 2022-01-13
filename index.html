@@ -6,17 +6,17 @@
 
 <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-<link rel="stylesheet" href="styles/indexStyle.css?v=202201122058">
+<link rel="stylesheet" href="styles/indexStyle.css?v=202201122134">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="scripts/dom-to-image.min.js"></script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<script src="scripts/dataObjectScript.js?v=202201122058"></script>
-<script src="scripts/utilityScript.js?v=202201122058"></script>
-<script src="scripts/dataReaderScript.js?v=202201122058"></script>
-<script src="scripts/chartScript.js?v=202201122058"></script>
+<script src="scripts/dataObjectScript.js?v=202201122134"></script>
+<script src="scripts/utilityScript.js?v=202201122134"></script>
+<script src="scripts/dataReaderScript.js?v=202201122134"></script>
+<script src="scripts/chartScript.js?v=202201122134"></script>
 <script>
     chartFromPageSource(
         "https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/los-angeles-county/index.html",
@@ -27,10 +27,10 @@
 
     function screenShot() {
         let t = getTimestampExt();
-        printDiv("#chartDiv", "LA_NewCases", t);
-        setTimeout(() => {printDiv("#hospitalizationChartDiv", "LA_Hosp", t);}, 2000);
-        setTimeout(() => {printDiv("#deathsChartDiv", "LA_NewDeaths", t);}, 2000);
-        setTimeout(() => {printDiv("#vaccinationChartDiv", "LA_Vaccinations", t);}, 2000);
+        printDiv("#chartArea", "LA_NewCases", t);
+        setTimeout(() => {printDiv("#hospitalizationChartArea", "LA_Hosp", t);}, 2000);
+        setTimeout(() => {printDiv("#deathsChartArea", "LA_NewDeaths", t);}, 2000);
+        setTimeout(() => {printDiv("#vaccinationChartArea", "LA_Vaccinations", t);}, 2000);
     }
 
 </script>
@@ -50,14 +50,18 @@
 
     <!-- <div class="page-container"> -->
         <div>
-            <div class="chart-title">LA County New Cases by Day</div>
-            <div id="chartDiv" class="chartContent"></div>
-            <div class="chart-title">LA County Vaccinations (Doses Adminstered Cummulative)</div>
-            <div id="vaccinationChartDiv" class="chartContent"></div>
-            <div class="chart-title">LA County Hospitalizations (Confirmed + Suspected) by Day</div>
-            <div id="hospitalizationChartDiv" class="chartContent"></div>
-            <div class="chart-title">LA County New Deaths by Day</div>
-            <div id="deathsChartDiv" class="chartContent"></div>
+            <div id="chartArea" class="chart-title">LA County New Cases by Day
+                <div id="chartDiv" class="chartContent"></div>
+            </div>
+            <div id="vaccinationChartArea" class="chart-title">LA County Vaccinations (Doses Adminstered Cummulative)
+                <div id="vaccinationChartDiv" class="chartContent"></div>
+            </div>
+            <div id="hospitalizationChartArea" class="chart-title">LA County Hospitalizations (Confirmed + Suspected) by Day
+                <div id="hospitalizationChartDiv" class="chartContent"></div>
+            </div>
+            <div id="deathsChartArea" class="chart-title">LA County New Deaths by Day
+                <div id="deathsChartDiv" class="chartContent"></div>
+            </div>
 
             Raw data from <a href="https://github.com/datadesk/california-coronavirus-data/blob/master/README.md">LA Times</a>
         </div>
